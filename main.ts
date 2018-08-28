@@ -390,7 +390,7 @@ export function qdee_setBusServo(index: number, angle: number, duration: number)
 /**
 *	Set the speed of the number 1 motor and number 2 motor, range of -100~100, that can control the tank to go advance or turn of.
 */
-//% weight=98 blockId=qdee_setMotorSpeed block="Set motor1 speed(-100~100)|%speed1|and motor2|speed %speed2"
+//% weight=98 blockId=qdee_setMotorSpeed blockGap=50 block="Set motor1 speed(-100~100)|%speed1|and motor2|speed %speed2"
 //% speed1.min=-100 speed1.max=100
 //% speed2.min=-100 speed2.max=100
     export function qdee_setMotorSpeed(speed1: number, speed2: number) {
@@ -429,64 +429,11 @@ export function qdee_setBusServo(index: number, angle: number, duration: number)
     export function onQdee_remote_ir_pressed(code: IRKEY,body: Action) {
         control.onEvent(MESSAGE_HEAD,code,body);
     }
-    
-/**
-* Get the volume level detected by the sound sensor, range 0 to 255
-*/
-//% weight=92 blockId=qdee_getSoundVolume block="Sound volume"
-	export function qdee_getSoundVolume(): number {	
-  	    return volume;
-    }	
 
-/**
- *  Get Qdee current voltage,the unit is mV
-*/
-    //% weight=90 blockId=qdee_getBatVoltage block="Get QbQdeeit current voltage (mV)"
-    export function qdee_getBatVoltage(): number {
-        return currentVoltage;
-    }
-
-/**
- * Set extension pins output high/low
- */
- //% weight=88 blockId=qdee_ext_output block="Set extension|pin %pin|%out"   
-    export function qdee_ext_output(pin: extPins, out: QdeePinIOStatus)
-    {
-        let buf = pins.createBuffer(7);
-        buf[0] = 0x55;
-        buf[1] = 0x55;
-        buf[2] = 0x05;
-        buf[3] = 0x3E;//cmd type
-        buf[4] = 0x2;
-        buf[5] = pin;
-        buf[6] = out;
-        serial.writeBuffer(buf);
-    }
-
-/**
- * Get extension pin io status
- */
-    //% weight=86 blockId=qdee_ext_io_status block="Get Qdee extension pin %pin"
-    export function qdee_ext_io_status(pin: extPins): number {
-        let return_value = 2;
-        switch (pin)
-        {
-            case extPins.pa2: return_value = PA2; break;
-            case extPins.pa3: return_value = PA3; break;
-            case extPins.pa6: return_value = PA6; break;
-            case extPins.pa7: return_value = PA7; break;
-            case extPins.pb0: return_value = PB0; break;
-            case extPins.pb1: return_value = PB1; break;
-            case extPins.pb10: return_value = PB10; break;
-            case extPins.pb11: return_value = PB11; break;
-            case extPins.pc13: return_value = PC13; break;
-        }
-        return return_value;
-    }
-/**
+    /**
 * Set ir enter learn mode
 */
-  //% weight=84 blockId=qdee_ir_learn_mode block="Set ir enter learn mode,code number %num"   
+  //% weight=92 blockId=qdee_ir_learn_mode block="Set ir enter learn mode,code number %num"   
 //% num.min=1 num.max=10    
   export function qdee_ir_learn_mode(num: number)
   {
@@ -505,7 +452,7 @@ export function qdee_setBusServo(index: number, angle: number, duration: number)
 /**
 * Let Qdee send ir custom data
 */
-  //% weight=82 blockId=qdee_send_ir_data block="Let Qdee send custom ir|address %address|data %num"
+  //% weight=90 blockId=qdee_send_ir_data block="Let Qdee send custom ir|address %address|data %num"
   //% num.min=0 num.max=254  
   export function qdee_send_ir_data(address: extAddress,num: number)
   {
@@ -526,7 +473,7 @@ export function qdee_setBusServo(index: number, angle: number, duration: number)
 /**
 * Let Qdee send ir learn data
 */
-  //% weight=80 blockId=qdee_send_learn_data block="Let Qdee send ir learn|number %num|"
+  //% weight=88 blockId=qdee_send_learn_data block="Let Qdee send ir learn|number %num|"
   //% num.min=1 num.max=10  
   export function qdee_send_learn_data(num: number)
   {
@@ -547,7 +494,7 @@ export function qdee_setBusServo(index: number, angle: number, duration: number)
 /**
 * Let Qdee send ir remote-control data
 */
-  //% weight=78 blockId=qdee_send_remote_data block="Let Qdee send ir remote-control|key %irKey|"
+  //% weight=86 blockGap=50 blockId=qdee_send_remote_data block="Let Qdee send ir remote-control|key %irKey|"
   export function qdee_send_remote_data(irKey: IRKEY)
   {
       let buf = pins.createBuffer(8);
@@ -561,6 +508,61 @@ export function qdee_setBusServo(index: number, angle: number, duration: number)
       buf[7] = 0;
       serial.writeBuffer(buf);
   }
+
+    
+/**
+* Get the volume level detected by the sound sensor, range 0 to 255
+*/
+//% weight=84 blockId=qdee_getSoundVolume block="Sound volume"
+	export function qdee_getSoundVolume(): number {	
+  	    return volume;
+    }	
+
+/**
+ *  Get Qdee current voltage,the unit is mV
+*/
+    //% weight=82 blockId=qdee_getBatVoltage block="Get QbQdeeit current voltage (mV)"
+    export function qdee_getBatVoltage(): number {
+        return currentVoltage;
+    }
+
+/**
+ * Set extension pins output high/low
+ */
+ //% weight=80 blockId=qdee_ext_output block="Set extension|pin %pin|%out"   
+    export function qdee_ext_output(pin: extPins, out: QdeePinIOStatus)
+    {
+        let buf = pins.createBuffer(7);
+        buf[0] = 0x55;
+        buf[1] = 0x55;
+        buf[2] = 0x05;
+        buf[3] = 0x3E;//cmd type
+        buf[4] = 0x2;
+        buf[5] = pin;
+        buf[6] = out;
+        serial.writeBuffer(buf);
+    }
+
+/**
+ * Get extension pin io status
+ */
+    //% weight=78 blockGap=50 blockId=qdee_ext_io_status block="Get Qdee extension pin %pin"
+    export function qdee_ext_io_status(pin: extPins): number {
+        let return_value = 2;
+        switch (pin)
+        {
+            case extPins.pa2: return_value = PA2; break;
+            case extPins.pa3: return_value = PA3; break;
+            case extPins.pa6: return_value = PA6; break;
+            case extPins.pa7: return_value = PA7; break;
+            case extPins.pb0: return_value = PB0; break;
+            case extPins.pb1: return_value = PB1; break;
+            case extPins.pb10: return_value = PB10; break;
+            case extPins.pb11: return_value = PB11; break;
+            case extPins.pc13: return_value = PC13; break;
+        }
+        return return_value;
+    }
 
     /**
 	 * Initialize RGB
