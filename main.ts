@@ -377,7 +377,7 @@ export function qdee_setBusServo(index: number, angle: number, duration: number)
    buf[0] = 0x55;
    buf[1] = 0x55;
    buf[2] = 0x08;
-   buf[3] = 0x035;//cmd type
+   buf[3] = 0x35;//cmd type
    buf[4] = 0x01;
    buf[5] = duration & 0xff;
    buf[6] = (duration >> 8) & 0xff;
@@ -449,7 +449,7 @@ export function qdee_setBusServo(index: number, angle: number, duration: number)
 /**
  * Set extension pins output high/low
  */
- //% weight=88 blockId=qdee_ext_output block="Set extension |pin %pin|%out"   
+ //% weight=88 blockId=qdee_ext_output block="Set extension|pin %pin|%out"   
     export function qdee_ext_output(pin: extPins, out: QdeePinIOStatus)
     {
         let buf = pins.createBuffer(7);
@@ -505,7 +505,7 @@ export function qdee_setBusServo(index: number, angle: number, duration: number)
 /**
 * Let Qdee send ir custom data
 */
-  //% weight=82 blockId=qdee_send_ir_data block="Let Qdee send custom ir |data %num|address %address"
+  //% weight=82 blockId=qdee_send_ir_data block="Let Qdee send custom ir|address %address|data %num"
   //% num.min=0 num.max=254  
   export function qdee_send_ir_data(address: extAddress,num: number)
   {

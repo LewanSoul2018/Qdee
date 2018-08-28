@@ -1,5 +1,5 @@
 {
-	"qdee.qdee_Init|block": "初始化qdee",
+	"qdee.qdee_Init|block": "初始化Qdee",
 	"qdee.qdee_setBusServo|block": "设置总线舵机|编号 %index|角度(0~240) %angle|运行时间 %duration",
 	"qdee.qdee_setMotorSpeed|block": "设置电机1速度(-100~100)|%speed1|和电机2|速度 %speed2",
 	"qdee.qdee_getSoundVolume|block": "音量值",
@@ -72,7 +72,7 @@
 	"qdee.qdee_ext_output|block":"设置扩展口|管脚 %pin|%out",
 	"qdee.qdee_ext_io_status|block":"扩展口状态 %pin",
 	"qdee.qdee_ir_learn_mode|block":"设置Qdee红外进入学习模式,学习码编号 %num",
-	"qdee.qdee_send_ir_data|block":"Qdee发送红外|地址码 %address|数据 %num|",
+	"qdee.qdee_send_ir_data|block":"Qdee发送红外|地址码 %address|数据 %num",
 	"qdee.qdee_send_learn_data|block":"Qdee发送学习码编号 %num",
-	"qdee.qdee_send_remote_data|block":"Qdee发送遥控器码|key %irKey|"
+	"qdee.qdee_send_remote_data|block":"Qdee发送遥控器码|按键 %irKey|"
 }
