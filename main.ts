@@ -73,11 +73,7 @@ namespace qdee {
         //% block="Port 2"
         port2 = 0x02,    
         //% block="Port 3"
-        port3 = 0x03,          
-        //% block="Port 4"
-        port4 = 0x04,    
-        //% block="Port 9"
-        port9 = 0x09
+        port3 = 0x03
     }
 
     export enum busServoPort {
@@ -101,6 +97,21 @@ namespace qdee {
         port8 = 0x08,      
         //% block="Port 9"
         port9 = 0x09, 
+    }
+
+    export enum knobPort {
+        //% block="Port 1"
+        port1 = 0x01,
+        //% block="Port 2"
+        port2 = 0x02,       
+        //% block="Port 3"
+        port3 = 0x03,
+        //% block="Port 6"
+        port6 = 0x06,       
+        //% block="Port 7"
+        port7 = 0x07,
+        //% block="Port 8"
+        port8 = 0x08
     }
 
     export enum extAddress {
@@ -276,6 +287,13 @@ namespace qdee {
     let PB11 = 2;
     let PC13 = 2;
 
+    let PA2_ad = 0;
+    let PA3_ad = 0;
+    let PA6_ad = 0;
+    let PA7_ad = 0;
+    let PB0_ad = 0;
+    let PB1_ad = 0;
+
     let MESSAGE_HEAD = 255;
 
     let i2cPortValid: boolean = true;    
@@ -300,6 +318,13 @@ namespace qdee {
                 let arg5Int: number = strToNumber(cmd.substr(9, 2));
                 let arg6Int: number = strToNumber(cmd.substr(11, 2));
 
+                PA6_ad = arg1Int;
+                PA7_ad = arg2Int;
+                PA3_ad = arg3Int;
+                PA2_ad = arg4Int;
+                PB0_ad = arg5Int;
+                PB1_ad = arg6Int;   
+                
                 PA6 = checkADPortValue(arg1Int);
                 PA7 = checkADPortValue(arg2Int);
                 PA3 = checkADPortValue(arg3Int);
@@ -1143,10 +1168,6 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
             case ultrasonicPort.port3:
                 trigPin = DigitalPin.P16;
                 break;
-            case ultrasonicPort.port4:
-            case ultrasonicPort.port9:
-                trigPin = DigitalPin.P19;
-                break;
         }
         pins.setPull(trigPin, PinPullMode.PullNone);
         pins.digitalWritePin(trigPin, 0);
@@ -1162,9 +1183,42 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
             distance = distanceBak;
         }
         distanceBak = d;
-        return distance / 36;
+        return distance * 10 /6 /58;
   }
-     
+  
+/**
+* Get the ad value of the knob moudule
+*/
+    //% weight=82 blockId=qdee_getKnobValue block="Get knob|port %port|value(0~255)"
+    export function qdee_getKnobValue(port: knobPort): number {
+        let adValue = 0;
+        switch (port)
+        {
+            case knobPort.port1:
+                adValue = pins.analogReadPin(AnalogPin.P1);
+                adValue = adValue * 255 / 1023;
+                break;
+            case knobPort.port2:
+                adValue = pins.analogReadPin(AnalogPin.P13);
+                adValue = adValue * 255 / 1023;
+                break;
+            case knobPort.port3:
+                adValue = pins.analogReadPin(AnalogPin.P16);
+                adValue = adValue * 255 / 1023;
+                break; 
+            case knobPort.port6:
+                adValue = PA6_ad;
+                break;  
+            case knobPort.port7:
+                adValue = PA3_ad;
+                break;  
+            case knobPort.port8:
+                adValue = PB0_ad;
+                break;  
+        }
+        return adValue;
+    }     
+    
 /**
  * Set extension pins output high/low
  */

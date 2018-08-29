@@ -31,4 +31,5 @@
 	"qdee.qdee_readLineFollowerStatus":"获得巡线传感器状态",
 	"qdee.qdee_touchButton":"检测触摸按键是否有按下，有按下返回1，没有按下返回0",
 	"qdee.qdee_ultrasonic":"获得超声波模块测试到的障碍物的距离",
+	"qdee.qdee_getKnobValue":"获取旋钮的ad值"
 }
