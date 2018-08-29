@@ -1181,7 +1181,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
 	 */
 	function qdee_initRGBLight() {
 		if (!lhRGBLight) {
-			lhRGBLight = QdeeRGBLight.create(DigitalPin.P15, 4, QdeeRGBPixelMode.RGB);
+			lhRGBLight = QdeeRGBLight.create(DigitalPin.P15, 6, QdeeRGBPixelMode.RGB);
         }
         qdee_clearLight();
     }
