@@ -1129,7 +1129,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
   /**
    * Get the distance of ultrasonic detection to the obstacle 
    */  
-//% weight=83 blockId=qdee_ultrasonic blockGap=50 block="Ultrasonic|port port%|distance(cm)"
+//% weight=83 blockId=qdee_ultrasonic blockGap=50 block="Ultrasonic|port %port|distance(cm)"
     export function qdee_ultrasonic(port: ultrasonicPort): number {
         let trigPin: DigitalPin = DigitalPin.P1;
         switch (port)
