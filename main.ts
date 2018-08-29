@@ -451,7 +451,7 @@ namespace qdee {
 /**
 * Set the angle of bus servo 1 to 8, range of 0~240 degree
 */
-//% weight=99 blockId=qdee_setBusServo block="Set bus servo|port %busServoPort|index %index|angle(0~240) %angle|duration %duration"
+//% weight=99 blockId=qdee_setBusServo block="Set bus servo|port %port|index %index|angle(0~240) %angle|duration %duration"
 //% angle.min=0 angle.max=240
 export function qdee_setBusServo(port: busServoPort,index: number, angle: number, duration: number) {
     if (angle > 240 || angle < 0)
@@ -562,7 +562,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
 * Let Qdee send ir learn data
 * @param num number of the learn code in 1-10. eg: 1
 */
-  //% weight=93 blockGap=50 blockId=qdee_send_learn_data block="Let Qdee send ir learn|number(1~10) %num|"
+  //% weight=93 blockId=qdee_send_learn_data block="Let Qdee send ir learn|number(1~10) %num|"
   //% num.min=1 num.max=10  
   export function qdee_send_learn_data(num: number)
   {
@@ -1128,7 +1128,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
   /**
    * Get the distance of ultrasonic detection to the obstacle 
    */  
-//% weight=83 blockId=qdee_ultrasonic block="Ultrasonic|port port%|distance(cm)"
+//% weight=83 blockId=qdee_ultrasonic blockGap=50 block="Ultrasonic|port port%|distance(cm)"
     export function qdee_ultrasonic(port: ultrasonicPort): number {
         let trigPin: DigitalPin = DigitalPin.P1;
         switch (port)
@@ -1226,7 +1226,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
     /**
      * Clear the color of the colored lights and turn off the lights.
      */
-    //% weight=70 blockGap=50 blockId=qdee_clearLight block="Clear light"
+    //% weight=69 blockGap=50 blockId=qdee_clearLight block="Clear light"
     export function qdee_clearLight() {
         lhRGBLight.clear();
     }
