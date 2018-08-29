@@ -291,7 +291,7 @@ namespace qdee {
     let PB0_ad = 0;
     let PB1_ad = 0;
 
-    let MESSAGE_HEAD = 255;
+    let MESSAGE_HEAD = 0xff;
 
     let i2cPortValid: boolean = true;    
     /**
@@ -350,13 +350,13 @@ namespace qdee {
                 {   
                     let high = (arg3Int >> 8) & 0xff;
                     let low = arg3Int & 0xff;
-                    if (high > extAddress.adress_10 && high < extAddress.adress_1)
+                    if (low >= extAddress.adress_10 && low <= extAddress.adress_1)
                     {
-                        control.raiseEvent(high,low);    
+                        control.raiseEvent(low,high);    
                     }
-                    else if (high == 0xff)
+                    else if (low == 0xff)
                     {
-                        control.raiseEvent(MESSAGE_HEAD,low);    
+                        control.raiseEvent(MESSAGE_HEAD,high);    
                     }
                     
                 }  
