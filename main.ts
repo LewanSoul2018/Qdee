@@ -1035,7 +1035,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
         if (speed > 100)
             speed = 100;
         else if (speed < -100)
-            speed = 100;
+            speed = -100;
         speed = speed * 1023 / 100;
         if (speed > 0)//正转
         {
@@ -1043,7 +1043,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
         }
         else
         {
-            pin2Clock = speed;
+            pin2Clock = -1*speed;
         }
         switch (port)
         {
