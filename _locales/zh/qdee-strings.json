@@ -109,8 +109,6 @@
 	"qdee.qdee_touchButton|block":"触摸按钮|接口 %port|按下",
 	"qdee.qdee_ultrasonic|block":"超声波模块|接口 %port|测试到障碍物距离(Cm)",
 	"qdee.knobPort.port1|block":"接口1",
-	"qdee.knobPort.port2|block":"接口2",
-	"qdee.knobPort.port3|block":"接口3",
 	"qdee.knobPort.port6|block":"接口6",
 	"qdee.knobPort.port7|block":"接口7",
 	"qdee.knobPort.port8|block":"接口8",

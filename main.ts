@@ -102,10 +102,6 @@ namespace qdee {
     export enum knobPort {
         //% block="Port 1"
         port1 = 0x01,
-        //% block="Port 2"
-        port2 = 0x02,       
-        //% block="Port 3"
-        port3 = 0x03,
         //% block="Port 6"
         port6 = 0x06,       
         //% block="Port 7"
@@ -1040,6 +1036,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
             speed = 100;
         else if (speed < -100)
             speed = 100;
+        speed = speed * 1023 / 100;
         if (speed > 0)//正转
         {
             pin1Clock = speed;
@@ -1133,20 +1130,6 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
                 else
                     status = false;
                 break;
-            case knobPort.port2:
-                adValue = pins.analogReadPin(AnalogPin.P13);
-                if (adValue < 305)
-                    status = true;
-                else
-                status = false;
-                break;
-            case knobPort.port3:
-                adValue = pins.analogReadPin(AnalogPin.P16);
-                if (adValue < 305)
-                    status = true;
-                else
-                    status = false;
-                break; 
             case knobPort.port6:
                 status = !PA6;
                 break;  
@@ -1208,14 +1191,6 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
                 adValue = pins.analogReadPin(AnalogPin.P1);
                 adValue = adValue * 255 / 1023;
                 break;
-            case knobPort.port2:
-                adValue = pins.analogReadPin(AnalogPin.P13);
-                adValue = adValue * 255 / 1023;
-                break;
-            case knobPort.port3:
-                adValue = pins.analogReadPin(AnalogPin.P16);
-                adValue = adValue * 255 / 1023;
-                break; 
             case knobPort.port6:
                 adValue = PA6_ad;
                 break;  
