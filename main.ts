@@ -114,6 +114,7 @@ namespace qdee {
         port8 = 0x08
     }
 
+
     export enum extAddress {
         //% block="address 1"
         adress_1 = 0xFE,
@@ -1120,34 +1121,39 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
 * Get the condition of the touch button
 */
     //% weight=84 blockId=qdee_touchButton block="Touch button|port %port|is pressed"
-    export function qdee_touchButton(port: extPort): boolean {
+    export function qdee_touchButton(port: knobPort): boolean {
         let status: boolean = false;
+        let adValue = 0;
         switch (port)
         {
-            case extPort.port1:
-                pins.setPull(DigitalPin.P1, PinPullMode.PullUp);
-                status = !pins.digitalReadPin(DigitalPin.P1);
+            case knobPort.port1:
+                adValue = pins.analogReadPin(AnalogPin.P1);
+                if (adValue < 305)
+                    status = true;
+                else
+                    status = false;
                 break;
-            case extPort.port2:
-                pins.setPull(DigitalPin.P13, PinPullMode.PullUp);
-                status = !pins.digitalReadPin(DigitalPin.P13);
+            case knobPort.port2:
+                adValue = pins.analogReadPin(AnalogPin.P13);
+                if (adValue < 305)
+                    status = true;
+                else
+                status = false;
                 break;
-            case extPort.port3:
-                pins.setPull(DigitalPin.P16, PinPullMode.PullUp);
-                status = !pins.digitalReadPin(DigitalPin.P16);
+            case knobPort.port3:
+                adValue = pins.analogReadPin(AnalogPin.P16);
+                if (adValue < 305)
+                    status = true;
+                else
+                    status = false;
                 break; 
-            case extPort.port4:
-            case extPort.port9:    
-                pins.setPull(DigitalPin.P20, PinPullMode.PullUp);
-                status = !pins.digitalReadPin(DigitalPin.P20);
-                break; 
-            case extPort.port6:
+            case knobPort.port6:
                 status = !PA6;
                 break;  
-            case extPort.port7:
+            case knobPort.port7:
                 status = !PA3;
                 break;  
-            case extPort.port8:
+            case knobPort.port8:
                 status = !PB0;
                 break;  
         }
