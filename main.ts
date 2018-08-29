@@ -110,6 +110,20 @@ namespace qdee {
         port8 = 0x08
     }
 
+    export enum touchKeyPort {
+        //% block="Port 1"
+        port1 = 0x01,
+        //% block="Port 2"
+        port2 = 0x02,
+        //% block="Port 3"
+        port3 = 0x03,        
+        //% block="Port 6"
+        port6 = 0x06,       
+        //% block="Port 7"
+        port7 = 0x07,
+        //% block="Port 8"
+        port8 = 0x08
+    }
 
     export enum extAddress {
         //% block="address 1"
@@ -1118,25 +1132,26 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
 * Get the condition of the touch button
 */
     //% weight=84 blockId=qdee_touchButton block="Touch button|port %port|is pressed"
-    export function qdee_touchButton(port: knobPort): boolean {
+    export function qdee_touchButton(port: touchKeyPort): boolean {
         let status: boolean = false;
-        let adValue = 0;
         switch (port)
         {
-            case knobPort.port1:
-                adValue = pins.analogReadPin(AnalogPin.P1);
-                if (adValue < 305)
-                    status = true;
-                else
-                    status = false;
+            case touchKeyPort.port1:
+                status = !pins.digitalReadPin(DigitalPin.P1);
                 break;
-            case knobPort.port6:
+            case touchKeyPort.port2:
+                status = !pins.digitalReadPin(DigitalPin.P13);
+                break;
+            case touchKeyPort.port3:
+                status = !pins.digitalReadPin(DigitalPin.P16);
+                break;
+            case touchKeyPort.port6:
                 status = !PA6;
                 break;  
-            case knobPort.port7:
+            case touchKeyPort.port7:
                 status = !PA3;
                 break;  
-            case knobPort.port8:
+            case touchKeyPort.port8:
                 status = !PB0;
                 break;  
         }
