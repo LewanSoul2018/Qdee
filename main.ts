@@ -1125,16 +1125,20 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
         switch (port)
         {
             case extPort.port1:
+                pins.setPull(DigitalPin.P1, PinPullMode.PullUp);
                 status = !pins.digitalReadPin(DigitalPin.P1);
                 break;
             case extPort.port2:
+                pins.setPull(DigitalPin.P13, PinPullMode.PullUp);
                 status = !pins.digitalReadPin(DigitalPin.P13);
                 break;
             case extPort.port3:
+                pins.setPull(DigitalPin.P16, PinPullMode.PullUp);
                 status = !pins.digitalReadPin(DigitalPin.P16);
                 break; 
             case extPort.port4:
             case extPort.port9:    
+                pins.setPull(DigitalPin.P20, PinPullMode.PullUp);
                 status = !pins.digitalReadPin(DigitalPin.P20);
                 break; 
             case extPort.port6:
