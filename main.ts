@@ -942,10 +942,10 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
 	}
 
 /**
-* Get the obstacle avoidance sensor status
+* Get the obstacle avoidance sensor status,1 detect obstacle,0 no detect obstacle
 */   
    //% weight=87 blockId=qdee_avoidSensor block="Obstacle avoidance sensor|port %port|%sensor|detect obstacle"
-    export function qdee_avoidSensor(port: extPort,sensor: AvoidSensor): boolean {
+    export function qdee_avoidSensor(port: extPort,sensor: AvoidSensor): number {
         let status = 0;
         switch (port)
         {
@@ -998,6 +998,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
                     status = pins.digitalReadPin(DigitalPin.P19);
             break;
         }   
+        return status;
     }
 
 /**
