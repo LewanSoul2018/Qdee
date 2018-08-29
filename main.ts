@@ -1125,7 +1125,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
         return status;
     } 
 
-
+    let distanceBak = 0;
   /**
    * Get the distance of ultrasonic detection to the obstacle 
    */  
@@ -1148,17 +1148,22 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
                 trigPin = DigitalPin.P20;
                 break;
         }
-        // send pulse
+        pins.setPull(trigPin, PinPullMode.PullNone);
         pins.digitalWritePin(trigPin, 0);
-        control.waitMicros(5);
+        control.waitMicros(2);
         pins.digitalWritePin(trigPin, 1);
         control.waitMicros(10);
         pins.digitalWritePin(trigPin, 0);
-        control.waitMicros(5);
-        // read pulse
-        let d = pins.pulseIn(trigPin, PulseValue.High, 11600);
-        basic.pause(10);
-        return d / 36;
+
+        let d = pins.pulseIn(trigPin, PulseValue.High, 25000);
+        let distance = d;
+        // filter timeout spikes
+        if (distance == 0 && distanceBak!= 0){
+            distance = distanceBak;
+        }
+        distanceBak = d;
+        return distance*10/6/58;
+       // return d / 36;
   }
      
 /**
