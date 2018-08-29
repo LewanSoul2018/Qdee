@@ -8,9 +8,9 @@
 	"qdee.qdee_getBatVoltage":"获取当前供电电压，单位是mV",
 	"qdee.qdee_ext_output":"设置扩展口输出高低电平",
 	"qdee.qdee_ext_io_status":"检测卡扩展口的高低电平状态",
-	"qdee.qdee_ir_learn_mode":"设置Qdee进入红外学习模式",
+	"qdee.qdee_ir_learn_mode":"设置Qdee进入红外学习模式，码编号范围1到10",
 	"qdee.qdee_send_ir_data":"发送自定义红外码",
-	"qdee.qdee_send_learn_data":"发送红外学习码",
+	"qdee.qdee_send_learn_data":"发送红外学习码，码编号范围1到10",
 	"qdee.qdee_send_remote_data":"发送红外遥控器码",
 	"qdee.qdee_setBrightness":"设置光的强度，一定要在显示灯光之前设置，这样才起到效果，范围0到255",
 	"qdee.qdee_setPixelRGB":"设置彩灯颜色，设置完成后请执行显示彩灯操作",
@@ -23,5 +23,12 @@
 	"qdee.qdee_getRunCarType":"获取坦克车行进命令类型，有停止、前进、后退、左转、右转、慢速前进，慢速左转，慢速右转",
 	"qdee.qdee_convertTemperature":"转换温度值为标准命令，发送到手机端，APP会显示当前温度",
 	"qdee.qdee_convertLight":"转换光线值为标准命令，发送到手机端，APP会显示当前光线等级(0~255)",
-	"qdee.qdee_convertBattery":"转换电压值，发送到手机端，APP会显示当前电压"
+	"qdee.qdee_convertBattery":"转换电压值，发送到手机端，APP会显示当前电压",
+	"qdee.qdee_init_colorSenso":"初始化颜色传感器，请在程序启动时执行",
+	"qdee.qdee_checkCurrentColor":"可以获得颜色传感器检测到颜色",
+	"qdee.qdee_avoidSensor":"获得避障传感器状态，从而知道前方有没有障碍物 ",
+	"qdee.qdee_fan_speed":"控制风扇旋转",
+	"qdee.qdee_readLineFollowerStatus":"获得巡线传感器状态",
+	"qdee.qdee_touchButton":"检测触摸按键是否有按下，有按下返回1，没有按下返回0",
+	"qdee.qdee_ultrasonic":"获得超声波模块测试到的障碍物的距离"
 }

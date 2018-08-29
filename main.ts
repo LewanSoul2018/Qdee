@@ -4,6 +4,19 @@
  //% weight=10 icon="\uf013" color=#2896ff
 namespace qdee {
 
+    export enum qdee_Colors {
+        //% block="Red"
+        Red = 0x01,
+        //% block="Green"
+        Green = 0x02,
+        //% block="Blue"
+        Blue = 0x03,
+	    //% block="White"
+        White = 0x04,
+	    //% block="Black"
+        Black = 0x05	
+    }
+
     export enum extPins {
         //% block="PA2"
         pa2 = 0x02,
@@ -23,6 +36,71 @@ namespace qdee {
         pb11 = 0x11,       
         //% block="PC13"
         pc13 = 0x23
+    }
+
+    export enum qdee_lineFollower {
+        //% blockId="S1_OUT_S2_OUT" block="Sensor1 and sensor2 are out black line"
+        S1_OUT_S2_OUT = 0x00,
+        //% blockId="S1_OUT_S2_IN" block="Sensor2 in black line but sensor1 not"
+        S1_OUT_S2_IN = 0x01,
+        //% blockId="S1_IN_S2_OUT" block="Sensor1 in black line but sensor2 not"
+        S1_IN_S2_OUT = 0x02,
+        //% blockId="S1_IN_S2_IN" block="Sensor1 and sensor2 are in black line "
+        S1_IN_S2_IN = 0x03
+     }
+
+    export enum colorSensorPort {
+        //% block="Port 4"
+        port4 = 0x04,       
+        //% block="Port 9"
+        port9 = 0x09
+    }
+
+    export enum fanPort {
+        //% block="Port 1"
+        port1 = 0x01,
+        //% block="Port 2"
+        port2 = 0x02,    
+        //% block="Port 4"
+        port4 = 0x04,    
+        //% block="Port 9"
+        port9 = 0x09,         
+    }
+
+    export enum ultrasonicPort {
+        //% block="Port 1"
+        port1 = 0x01,
+        //% block="Port 2"
+        port2 = 0x02,    
+        //% block="Port 3"
+        port3 = 0x03,          
+        //% block="Port 4"
+        port4 = 0x04,    
+        //% block="Port 9"
+        port9 = 0x09
+    }
+
+    export enum busServoPort {
+        //% block="Port 10"
+        port10 = 0x0A
+    }
+    export enum extPort {
+        //% block="Port 1"
+        port1 = 0x01,
+        //% block="Port 2"
+        port2 = 0x02,       
+        //% block="Port 3"
+        port3 = 0x03,
+        //% block="Port 4"
+        port4 = 0x04,       
+        //% block="Port 6"
+        port6 = 0x06,       
+        //% block="Port 7"
+        port7 = 0x07,
+        //% block="Port 8"
+        port8 = 0x08,      
+        //% block="Port 9"
+        port9 = 0x09, 
     }
 
     export enum extAddress {
@@ -146,6 +224,13 @@ namespace qdee {
         COMMAND_ERRO
     }
 
+    export enum AvoidSensor {
+        //% block="sensor 1"
+        Sensor_1 = 1,
+        //% block="sensor 2"
+        Sensor_2 = 2
+    }
+
   /**
    * Qdee initialization, please execute at boot time
   */
@@ -192,6 +277,8 @@ namespace qdee {
     let PC13 = 2;
 
     let MESSAGE_HEAD = 255;
+
+    let i2cPortValid: boolean = true;    
     /**
     * Get the handle command.
     */
@@ -364,9 +451,9 @@ namespace qdee {
 /**
 * Set the angle of bus servo 1 to 8, range of 0~240 degree
 */
-//% weight=99 blockId=qdee_setBusServo block="Set bus servo|index %index|angle(0~240) %angle|duration %duration"
+//% weight=99 blockId=qdee_setBusServo block="Set bus servo|port %busServoPort|index %index|angle(0~240) %angle|duration %duration"
 //% angle.min=0 angle.max=240
-export function qdee_setBusServo(index: number, angle: number, duration: number) {
+export function qdee_setBusServo(port: busServoPort,index: number, angle: number, duration: number) {
     if (angle > 240 || angle < 0)
     {
         return; 
@@ -377,7 +464,7 @@ export function qdee_setBusServo(index: number, angle: number, duration: number)
    buf[0] = 0x55;
    buf[1] = 0x55;
    buf[2] = 0x08;
-   buf[3] = 0x35;//cmd type
+   buf[3] = 0x03;//cmd type
    buf[4] = 0x01;
    buf[5] = duration & 0xff;
    buf[6] = (duration >> 8) & 0xff;
@@ -415,7 +502,7 @@ export function qdee_setBusServo(index: number, angle: number, duration: number)
      * @param code the button that needs to be pressed
      * @param body code to run when event is raised
      */
-    //% weight=96 blockId=onQdee_custom_ir_pressed block="on ir button|%address|code %code|pressed"
+    //% weight=97 blockId=onQdee_custom_ir_pressed block="on ir button|%address|code %code|pressed"
     export function onQdee_custom_ir_pressed(address: extAddress,code: number , body: Action) {
         control.onEvent(address,code,body);
     }
@@ -425,15 +512,16 @@ export function qdee_setBusServo(index: number, angle: number, duration: number)
      * @param code the ir key button that needs to be pressed
      * @param body code to run when event is raised
      */
-    //% weight=94 blockId=onQdee_remote_ir_pressed block="on remote-control|%code|pressed"
+    //% weight=96 blockId=onQdee_remote_ir_pressed block="on remote-control|%code|pressed"
     export function onQdee_remote_ir_pressed(code: IRKEY,body: Action) {
         control.onEvent(MESSAGE_HEAD,code,body);
     }
 
-    /**
+/**
 * Set ir enter learn mode
+* @param num number of the learn code in 1-10. eg: 1
 */
-  //% weight=92 blockId=qdee_ir_learn_mode block="Set ir enter learn mode,code number %num"   
+  //% weight=95 blockId=qdee_ir_learn_mode block="Set ir enter learn mode,code number(1~10) %num"   
 //% num.min=1 num.max=10    
   export function qdee_ir_learn_mode(num: number)
   {
@@ -452,7 +540,7 @@ export function qdee_setBusServo(index: number, angle: number, duration: number)
 /**
 * Let Qdee send ir custom data
 */
-  //% weight=90 blockId=qdee_send_ir_data block="Let Qdee send custom ir|address %address|data %num"
+  //% weight=94 blockId=qdee_send_ir_data block="Let Qdee send custom ir|address %address|data %num"
   //% num.min=0 num.max=254  
   export function qdee_send_ir_data(address: extAddress,num: number)
   {
@@ -472,8 +560,9 @@ export function qdee_setBusServo(index: number, angle: number, duration: number)
     
 /**
 * Let Qdee send ir learn data
+* @param num number of the learn code in 1-10. eg: 1
 */
-  //% weight=88 blockId=qdee_send_learn_data block="Let Qdee send ir learn|number %num|"
+  //% weight=93 blockGap=50 blockId=qdee_send_learn_data block="Let Qdee send ir learn|number(1~10) %num|"
   //% num.min=1 num.max=10  
   export function qdee_send_learn_data(num: number)
   {
@@ -494,7 +583,7 @@ export function qdee_setBusServo(index: number, angle: number, duration: number)
 /**
 * Let Qdee send ir remote-control data
 */
-  //% weight=86 blockGap=50 blockId=qdee_send_remote_data block="Let Qdee send ir remote-control|key %irKey|"
+  //% weight=92 blockGap=50 blockId=qdee_send_remote_data block="Let Qdee send ir remote-control|key %irKey|"
   export function qdee_send_remote_data(irKey: IRKEY)
   {
       let buf = pins.createBuffer(8);
@@ -513,7 +602,7 @@ export function qdee_setBusServo(index: number, angle: number, duration: number)
 /**
 * Get the volume level detected by the sound sensor, range 0 to 255
 */
-//% weight=84 blockId=qdee_getSoundVolume block="Sound volume"
+//% weight=91 blockId=qdee_getSoundVolume block="Sound volume"
 	export function qdee_getSoundVolume(): number {	
   	    return volume;
     }	
@@ -521,16 +610,560 @@ export function qdee_setBusServo(index: number, angle: number, duration: number)
 /**
  *  Get Qdee current voltage,the unit is mV
 */
-    //% weight=82 blockId=qdee_getBatVoltage block="Get QbQdeeit current voltage (mV)"
+    //% weight=90 blockGap=50 blockId=qdee_getBatVoltage block="Get Qdee current voltage (mV)"
     export function qdee_getBatVoltage(): number {
         return currentVoltage;
     }
 
+    const APDS9960_I2C_ADDR = 0x39;
+    const APDS9960_ID_1 = 0xA8;
+    const APDS9960_ID_2 = 0x9C;
+    /* APDS-9960 register addresses */
+    const APDS9960_ENABLE = 0x80;
+    const APDS9960_ATIME  = 0x81;
+    const APDS9960_WTIME  = 0x83;
+    const APDS9960_AILTL  = 0x84;
+    const APDS9960_AILTH  = 0x85;
+    const APDS9960_AIHTL  = 0x86;
+    const APDS9960_AIHTH  = 0x87;
+    const APDS9960_PILT = 0x89;
+    const APDS9960_PIHT = 0x8B;
+    const APDS9960_PERS = 0x8C;
+    const APDS9960_CONFIG1 = 0x8D;
+    const APDS9960_PPULSE  = 0x8E;
+    const APDS9960_CONTROL = 0x8F;
+    const APDS9960_CONFIG2 = 0x90;
+    const APDS9960_ID = 0x92;
+    const APDS9960_STATUS  = 0x93;
+    const APDS9960_CDATAL  = 0x94;
+    const APDS9960_CDATAH  = 0x95;
+    const APDS9960_RDATAL  = 0x96;
+    const APDS9960_RDATAH  = 0x97;
+    const APDS9960_GDATAL  = 0x98;
+    const APDS9960_GDATAH  = 0x99;
+    const APDS9960_BDATAL  = 0x9A;
+    const APDS9960_BDATAH  = 0x9B;
+    const APDS9960_PDATA   = 0x9C;
+    const APDS9960_POFFSET_UR = 0x9D;
+    const APDS9960_POFFSET_DL = 0x9E;
+    const APDS9960_CONFIG3 = 0x9F;
+
+
+    /* LED Drive values */
+    const LED_DRIVE_100MA = 0;
+    const LED_DRIVE_50MA = 1;
+    const LED_DRIVE_25MA = 2;
+    const LED_DRIVE_12_5MA = 3;
+
+    /* ALS Gain (AGAIN) values */
+    const AGAIN_1X = 0;
+    const AGAIN_4X = 1;
+    const AGAIN_16X = 2;
+    const AGAIN_64X = 3;
+    
+    /* Default values */
+    const DEFAULT_ATIME = 219;    // 103ms
+    const DEFAULT_WTIME = 246;    // 27ms
+    const DEFAULT_PROX_PPULSE = 0x87;    // 16us, 8 pulses
+    const DEFAULT_GESTURE_PPULSE = 0x89;    // 16us, 10 pulses
+    const DEFAULT_POFFSET_UR = 0;       // 0 offset
+    const DEFAULT_POFFSET_DL = 0;       // 0 offset      
+    const DEFAULT_CONFIG1 = 0x60;    // No 12x wait (WTIME) factor
+    const DEFAULT_PILT = 0;       // Low proximity threshold
+    const DEFAULT_PIHT = 50;      // High proximity threshold
+    const DEFAULT_AILT = 0xFFFF;  // Force interrupt for calibration
+    const DEFAULT_AIHT = 0;
+    const DEFAULT_PERS = 0x11;    // 2 consecutive prox or ALS for int.
+    const DEFAULT_CONFIG2 = 0x01;    // No saturation interrupts or LED boost  
+    const DEFAULT_CONFIG3 = 0;       // Enable all photodiodes, no SAI
+    const DEFAULT_GPENTH = 40;      // Threshold for entering gesture mode
+    const DEFAULT_GEXTH = 30;      // Threshold for exiting gesture mode    
+    const DEFAULT_GCONF1 = 0x40;    // 4 gesture events for int., 1 for exit
+    const DEFAULT_GOFFSET = 0;       // No offset scaling for gesture mode
+    const DEFAULT_GPULSE = 0xC9;    // 32us, 10 pulses
+    const DEFAULT_GCONF3 = 0;       // All photodiodes active during gesture
+    const DEFAULT_GIEN = 0;       // Disable gesture interrupts
+    const DEFAULT_LDRIVE = LED_DRIVE_100MA;
+    const DEFAULT_AGAIN = AGAIN_4X;
+    
+    const OFF = 0;
+    const ON = 1;
+    const POWER = 0;
+    const AMBIENT_LIGHT = 1;
+    const PROXIMITY = 2;
+    const WAIT = 3;
+    const AMBIENT_LIGHT_INT = 4;
+    const PROXIMITY_INT = 5;
+    const GESTURE = 6;
+    const ALL = 7;
+
+
+    function i2cwrite(reg: number, value: number) {
+       let buf = pins.createBuffer(2);
+       buf[0] = reg;
+       buf[1] = value;
+       pins.i2cWriteBuffer(APDS9960_I2C_ADDR, buf);
+    }
+
+     function i2cread(reg: number): number {
+		pins.i2cWriteNumber(APDS9960_I2C_ADDR, reg, NumberFormat.UInt8BE);
+        let val = pins.i2cReadNumber(APDS9960_I2C_ADDR, NumberFormat.UInt8BE);
+        return val;
+    }
+
+     function InitColor(): boolean {
+         let id = i2cread(APDS9960_ID);
+        //  serial.writeLine("id:")
+        //  serial.writeNumber(id); 
+        if (!(id == APDS9960_ID_1 || id == APDS9960_ID_2)) {
+            return false;
+         }
+        //  serial.writeLine("set mode:")
+        setMode(ALL, OFF);
+        i2cwrite(APDS9960_ATIME, DEFAULT_ATIME);
+        i2cwrite(APDS9960_WTIME, DEFAULT_WTIME);
+        i2cwrite(APDS9960_PPULSE, DEFAULT_PROX_PPULSE);
+        i2cwrite(APDS9960_POFFSET_UR, DEFAULT_POFFSET_UR);
+        i2cwrite(APDS9960_POFFSET_DL, DEFAULT_POFFSET_DL);
+         i2cwrite(APDS9960_CONFIG1, DEFAULT_CONFIG1);
+        setLEDDrive(DEFAULT_LDRIVE);
+        setAmbientLightGain(DEFAULT_AGAIN);
+        setLightIntLowThreshold(DEFAULT_AILT);
+        setLightIntHighThreshold(DEFAULT_AIHT);
+        i2cwrite(APDS9960_PERS, DEFAULT_PERS);
+        i2cwrite(APDS9960_CONFIG2, DEFAULT_CONFIG2);
+        i2cwrite(APDS9960_CONFIG3, DEFAULT_CONFIG3);
+        return true;  
+    }
+        
+     function setMode(mode: number, enable: number) {
+         let reg_val = getMode();
+         serial.writeLine("mode:");
+         serial.writeNumber(reg_val);
+            /* Change bit(s) in ENABLE register */
+        enable = enable & 0x01;
+         if (mode >= 0 && mode <= 6)
+         {
+             if (enable > 0)
+             {
+                reg_val |= (1 << mode);
+             }
+             else
+             {
+                //reg_val &= ~(1 << mode);
+                 reg_val &= (0xff-(1 << mode)); 
+             }
+        }
+         else if(mode == ALL)
+         {
+             if (enable > 0)
+             {
+                reg_val = 0x7F;
+             }
+             else
+             {
+                reg_val = 0x00;
+             }
+        }
+        i2cwrite(APDS9960_ENABLE,reg_val);
+    }
+    
+     function getMode(): number {
+            let enable_value = i2cread(APDS9960_ENABLE);
+            return enable_value;
+        }
+
+     function setLEDDrive(drive: number) {
+        let val = i2cread(APDS9960_CONTROL);
+            /* Set bits in register to given value */
+         drive &= 0b00000011;
+         drive = drive << 6;
+         val &= 0b00111111;
+         val |= drive;
+         i2cwrite(APDS9960_CONTROL,val);
+    }
+    
+     function setLightIntLowThreshold(threshold: number) {
+        let val_low = threshold & 0x00FF;
+        let val_high = (threshold & 0xFF00) >> 8;
+        i2cwrite(APDS9960_AILTL, val_low);
+        i2cwrite(APDS9960_AILTH,val_high);
+    }
+
+     function setLightIntHighThreshold(threshold: number) {
+        let val_low = threshold & 0x00FF;
+        let val_high = (threshold & 0xFF00) >> 8;
+        i2cwrite(APDS9960_AIHTL, val_low);
+        i2cwrite(APDS9960_AIHTH, val_high);
+    }
+
+     function enableLightSensor(interrupts: boolean) {
+        setAmbientLightGain(DEFAULT_AGAIN);
+        if (interrupts)
+        {
+            setAmbientLightIntEnable(1);
+        }   
+        else
+        {
+            setAmbientLightIntEnable(0);
+        }
+        enablePower();
+        setMode(AMBIENT_LIGHT,1);
+    }
+
+     function setAmbientLightGain(drive: number) {
+        let val = i2cread(APDS9960_CONTROL);
+            /* Set bits in register to given value */
+        drive &= 0b00000011;
+        val &= 0b11111100;
+        val |= drive;
+        i2cwrite(APDS9960_CONTROL,val);
+    }
+
+     function getAmbientLightGain(): number {
+        let val = i2cread(APDS9960_CONTROL);
+        val &= 0b00000011;
+        return val;
+    }
+
+     function enablePower() {
+        setMode(POWER,1);
+    }
+
+     function setAmbientLightIntEnable(enable: number) {
+        let val = i2cread(APDS9960_ENABLE);
+            /* Set bits in register to given value */
+        enable &= 0b00000001;
+        enable = enable << 4;
+        val &= 0b11101111;
+        val |= enable;
+        i2cwrite(APDS9960_ENABLE, val);
+    }
+
+     function readAmbientLight(): number {
+        let val_byte = i2cread(APDS9960_CDATAL);
+        let val = val_byte;
+        val_byte = i2cread(APDS9960_CDATAH);
+        val = val + val_byte << 8;
+        return val;
+    }
+    
+     function readRedLight(): number {
+     
+        let val_byte = i2cread(APDS9960_RDATAL);
+        let val = val_byte;
+        val_byte = i2cread(APDS9960_RDATAH);
+        val = val + val_byte << 8;
+        return val;
+    }
+
+     function readGreenLight(): number {
+        
+           let val_byte = i2cread(APDS9960_GDATAL);
+           let val = val_byte;
+           val_byte = i2cread(APDS9960_GDATAH);
+           val = val + val_byte << 8;
+           return val;
+    }
+    
+     function readBlueLight(): number {
+        
+           let val_byte = i2cread(APDS9960_BDATAL);
+           let val = val_byte;
+           val_byte = i2cread(APDS9960_BDATAH);
+           val = val + val_byte << 8;
+           return val;
+       }
+
+/**
+ * Initialize the color sensor,please execute at boot time
+ */
+    //% weight=89 blockId=qdee_init_colorSensor block="Initialize color sensor port at %port"
+    export function qdee_init_colorSensor(port: colorSensorPort) {
+        if (i2cPortValid)
+        {
+            InitColor();
+            enableLightSensor(false);
+            control.waitMicros(100);
+        }
+        i2cPortValid = false;
+    }
+
+    /**
+	 *  Color sensor return the color.
+	 */
+	//% weight=88 blockId=qdee_checkCurrentColor block="Current color %color"
+    export function qdee_checkCurrentColor(color: qdee_Colors): boolean {
+		let r = readRedLight();
+		let g = readGreenLight();
+		let b = readBlueLight();
+        let t = qdee_Colors.Red;
+    
+		if (r > g)
+		{
+			t = qdee_Colors.Red;
+		}	
+		else
+		{
+			t = qdee_Colors.Green;
+		}	
+
+		if (t == qdee_Colors.Green && g < b)
+		{
+			t = qdee_Colors.Blue;
+		}	
+		if (t == qdee_Colors.Red && r < b)
+		{
+			t = qdee_Colors.Blue;
+         }
+        // serial.writeNumber(r); 
+        //  serial.writeLine("->red");
+        //  serial.writeNumber(g); 
+        //  serial.writeLine("->green"); 
+        //  serial.writeNumber(b); 
+        //  serial.writeLine("->blue"); 
+        
+		if (t == qdee_Colors.Blue && b > 1500) {
+           // serial.writeLine("blue");
+            
+		}
+		else if (t == qdee_Colors.Green && g > 1500) {
+           // serial.writeLine("green");
+		}
+		else if (t == qdee_Colors.Red && r > 1500) {
+			//serial.writeLine("red");
+		}
+		else
+        {
+            //serial.writeLine("none");
+            return false;
+        }		
+        return (color == t);
+	}
+
+/**
+* Get the obstacle avoidance sensor status
+*/   
+   //% weight=87 blockId=qdee_avoidSensor block="Obstacle avoidance sensor|port %port|%sensor|detect obstacle"
+    export function qdee_avoidSensor(port: extPort,sensor: AvoidSensor): boolean {
+        let status = 0;
+        switch (port)
+        {
+            case extPort.port1:
+                if (sensor == AvoidSensor.Sensor_1)
+                    status = pins.digitalReadPin(DigitalPin.P1);
+                else
+                status = pins.digitalReadPin(DigitalPin.P2);
+                break;
+            case extPort.port2:
+                if (sensor == AvoidSensor.Sensor_1)
+                    status = pins.digitalReadPin(DigitalPin.P13);
+                else
+                    status = pins.digitalReadPin(DigitalPin.P14);
+                break;
+            case extPort.port3:
+                if (sensor == AvoidSensor.Sensor_1)
+                    status = pins.digitalReadPin(DigitalPin.P16);
+                else
+                    status = PC13;
+                break;
+            case extPort.port4:
+                if (sensor == AvoidSensor.Sensor_1)
+                    status = pins.digitalReadPin(DigitalPin.P20);
+                else
+                    status = pins.digitalReadPin(DigitalPin.P19);
+                break;
+            case extPort.port6:
+                if (sensor == AvoidSensor.Sensor_1)
+                    status = PA6;
+                else
+                    status = PA7;
+                break;
+            case extPort.port7:
+            if (sensor == AvoidSensor.Sensor_1)
+                status = PA3;
+            else
+                status = PA2;
+            break;
+            case extPort.port8:
+            if (sensor == AvoidSensor.Sensor_1)
+                status = PB0;
+            else
+                status = PB1;
+                break;
+            case extPort.port9:
+                if (sensor == AvoidSensor.Sensor_1)
+                    status = pins.digitalReadPin(DigitalPin.P20);
+                else
+                    status = pins.digitalReadPin(DigitalPin.P19);
+            break;
+        }   
+    }
+
+/**
+ * Set fan speed
+ * @param speed the speed of the fan in -100~100. eg: 80
+ */
+    //% weight=86 blockId=qdee_fan_speed block="Set the fan|port %port|speed %speed"
+    // speed.min=-100 speed.max=100
+    export function qdee_fan_speed(port: fanPort,speed: number) {
+        let pin1Clock = 0;
+        let pin2Clock = 0;
+        if (speed > 100)
+            speed = 100;
+        else if (speed < -100)
+            speed = 100;
+        if (speed > 0)//正转
+        {
+            pin1Clock = speed;
+        }
+        else
+        {
+            pin2Clock = speed;
+        }
+        switch (port)
+        {
+            case fanPort.port1:
+                pins.analogWritePin(AnalogPin.P1, pin1Clock);
+                pins.analogWritePin(AnalogPin.P2, pin2Clock);
+                break;
+            case fanPort.port2:
+                pins.analogWritePin(AnalogPin.P13, pin1Clock);
+                pins.analogWritePin(AnalogPin.P14, pin2Clock);
+                break;
+            case fanPort.port4:
+            case fanPort.port9:
+                pins.analogWritePin(AnalogPin.P20, pin1Clock);
+                pins.analogWritePin(AnalogPin.P19, pin2Clock);
+                break;
+        }
+    }
+
+/**
+* Get the condition of the line follower sensor
+*/
+    //% weight=85 blockId=qdee_readLineFollowerStatus block="Line follower status|port %port|%status"
+    export function qdee_readLineFollowerStatus(port: extPort, status: qdee_lineFollower): boolean {
+        let s1 = 0;
+        let s2 = 0;
+        switch (port)
+        {
+            case extPort.port1:
+                s1 = pins.digitalReadPin(DigitalPin.P1);
+                s2 = pins.digitalReadPin(DigitalPin.P2);
+                break;
+            case extPort.port2:
+                s1 = pins.digitalReadPin(DigitalPin.P13);
+                s2 = pins.digitalReadPin(DigitalPin.P14);
+                break;
+            case extPort.port3:
+                s1 = pins.digitalReadPin(DigitalPin.P16);
+                s2 = PC13;
+                break; 
+            case extPort.port4:
+            case extPort.port9:    
+                s1 = pins.digitalReadPin(DigitalPin.P20);
+                s2 = pins.digitalReadPin(DigitalPin.P19);
+                break; 
+            case extPort.port6:
+                s1 = PA6;
+                s2 = PA7;
+                break;  
+            case extPort.port7:
+                s1 = PA3;
+                s2 = PA2;
+                break;  
+            case extPort.port8:
+                s1 = PB0;
+                s2 = PB1;
+                break;  
+        }
+
+        let s = ((1 & s1) << 1) | s2;
+        if (s == status)
+        {
+            return true;
+        }    
+        else
+        {
+            return false;
+        }     
+    }
+    
+/**
+* Get the condition of the touch button
+*/
+    //% weight=84 blockId=qdee_touchButton block="Touch button|port %port|is pressed"
+    export function qdee_touchButton(port: extPort): boolean {
+        let status: boolean = false;
+        switch (port)
+        {
+            case extPort.port1:
+                status = !pins.digitalReadPin(DigitalPin.P1);
+                break;
+            case extPort.port2:
+                status = !pins.digitalReadPin(DigitalPin.P13);
+                break;
+            case extPort.port3:
+                status = !pins.digitalReadPin(DigitalPin.P16);
+                break; 
+            case extPort.port4:
+            case extPort.port9:    
+                status = !pins.digitalReadPin(DigitalPin.P20);
+                break; 
+            case extPort.port6:
+                status = !PA6;
+                break;  
+            case extPort.port7:
+                status = !PA3;
+                break;  
+            case extPort.port8:
+                status = !PB0;
+                break;  
+        }
+        return status;
+    } 
+
+
+  /**
+   * Get the distance of ultrasonic detection to the obstacle 
+   */  
+//% weight=83 blockId=qdee_ultrasonic block="Ultrasonic|port port%|distance(cm)"
+    export function qdee_ultrasonic(port: ultrasonicPort): number {
+        let trigPin: DigitalPin = DigitalPin.P1;
+        switch (port)
+        {
+            case ultrasonicPort.port1:
+                trigPin = DigitalPin.P1;
+                break;
+            case ultrasonicPort.port2:
+                trigPin = DigitalPin.P13;
+                break;
+            case ultrasonicPort.port3:
+                trigPin = DigitalPin.P16;
+                break;
+            case ultrasonicPort.port4:
+            case ultrasonicPort.port9:
+                trigPin = DigitalPin.P20;
+                break;
+        }
+        // send pulse
+        pins.digitalWritePin(trigPin, 0);
+        control.waitMicros(5);
+        pins.digitalWritePin(trigPin, 1);
+        control.waitMicros(10);
+        pins.digitalWritePin(trigPin, 0);
+        control.waitMicros(5);
+        // read pulse
+        let d = pins.pulseIn(trigPin, PulseValue.High, 11600);
+        basic.pause(10);
+        return d / 36;
+  }
+     
 /**
  * Set extension pins output high/low
  */
- //% weight=80 blockId=qdee_ext_output block="Set extension|pin %pin|%out"   
-    export function qdee_ext_output(pin: extPins, out: QdeePinIOStatus)
+  function qdee_ext_output(pin: number, out: number)
     {
         let buf = pins.createBuffer(7);
         buf[0] = 0x55;
@@ -542,28 +1175,6 @@ export function qdee_setBusServo(index: number, angle: number, duration: number)
         buf[6] = out;
         serial.writeBuffer(buf);
     }
-
-/**
- * Get extension pin io status
- */
-    //% weight=78 blockGap=50 blockId=qdee_ext_io_status block="Get Qdee extension pin %pin"
-    export function qdee_ext_io_status(pin: extPins): number {
-        let return_value = 2;
-        switch (pin)
-        {
-            case extPins.pa2: return_value = PA2; break;
-            case extPins.pa3: return_value = PA3; break;
-            case extPins.pa6: return_value = PA6; break;
-            case extPins.pa7: return_value = PA7; break;
-            case extPins.pb0: return_value = PB0; break;
-            case extPins.pb1: return_value = PB1; break;
-            case extPins.pb10: return_value = PB10; break;
-            case extPins.pb11: return_value = PB11; break;
-            case extPins.pc13: return_value = PC13; break;
-        }
-        return return_value;
-    }
-
     /**
 	 * Initialize RGB
 	 */
