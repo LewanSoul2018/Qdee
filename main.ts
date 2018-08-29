@@ -1164,7 +1164,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
   /**
    * Get the distance of ultrasonic detection to the obstacle 
    */  
-//% weight=83 blockId=qdee_ultrasonic blockGap=50 block="Ultrasonic|port %port|distance(cm)"
+//% weight=83 blockId=qdee_ultrasonic  block="Ultrasonic|port %port|distance(cm)"
     export function qdee_ultrasonic(port: ultrasonicPort): number {
         let trigPin: DigitalPin = DigitalPin.P1;
         switch (port)
@@ -1199,7 +1199,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
 /**
 * Get the ad value of the knob moudule
 */
-    //% weight=82 blockId=qdee_getKnobValue block="Get knob|port %port|value(0~255)"
+    //% weight=82 blockId=qdee_getKnobValue blockGap=50 block="Get knob|port %port|value(0~255)"
     export function qdee_getKnobValue(port: knobPort): number {
         let adValue = 0;
         switch (port)
