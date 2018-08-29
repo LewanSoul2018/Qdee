@@ -1145,7 +1145,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
                 break;
             case ultrasonicPort.port4:
             case ultrasonicPort.port9:
-                trigPin = DigitalPin.P20;
+                trigPin = DigitalPin.P19;
                 break;
         }
         pins.setPull(trigPin, PinPullMode.PullNone);
@@ -1162,8 +1162,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
             distance = distanceBak;
         }
         distanceBak = d;
-        return distance*10/6/58;
-       // return d / 36;
+        return distance / 36;
   }
      
 /**
