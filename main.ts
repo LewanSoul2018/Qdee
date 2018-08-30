@@ -1131,7 +1131,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
 * Get the condition of the touch button,press return 1,or return 0
 */
     //% weight=84 blockId=qdee_touchButton block=" Touch button|port %port|is pressed"    
-    function qdee_touchButton(port: touchKeyPort): boolean {
+    export function qdee_touchButton(port: touchKeyPort): boolean {
         let status: boolean = false;
         switch (port)
         {
