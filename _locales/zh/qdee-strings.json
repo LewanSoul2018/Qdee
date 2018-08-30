@@ -121,5 +121,7 @@
 	"qdee.touchKeyPort.port7|block":"接口7",
 	"qdee.touchKeyPort.port8|block":"接口8",
 	"qdee.qdee_touchButton|block":"触摸按钮|%port|被按下",
-	"qdee.qdee_lineSensorValue|block":"获取巡线传感器|%port|%sensor|的ad值"
+	"qdee.qdee_lineSensorValue|block":"获取巡线传感器|%port|%sensor|的ad值",
+	"qdee.LineFollowerSensor.LFSensor_1|block":"巡线传感器1",
+	"qdee.LineFollowerSensor.LFSensor_2|block":"巡线传感器2"
 }
