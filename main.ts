@@ -985,57 +985,46 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
 * Get the obstacle avoidance sensor status,1 detect obstacle,0 no detect obstacle
 */   
    //% weight=87 blockId=qdee_avoidSensor block="Obstacle avoidance sensor|port %port|%sensor|detect obstacle"
-    export function qdee_avoidSensor(port: extPort,sensor: AvoidSensor): number {
+    export function qdee_avoidSensor(port: touchKeyPort,sensor: AvoidSensor): number {
         let status = 0;
         switch (port)
         {
-            case extPort.port1:
+            case touchKeyPort.port1:
                 if (sensor == AvoidSensor.Sensor_1)
                     status = pins.digitalReadPin(DigitalPin.P1);
                 else
                 status = pins.digitalReadPin(DigitalPin.P2);
                 break;
-            case extPort.port2:
+            case touchKeyPort.port2:
                 if (sensor == AvoidSensor.Sensor_1)
                     status = pins.digitalReadPin(DigitalPin.P13);
                 else
                     status = pins.digitalReadPin(DigitalPin.P14);
                 break;
-            case extPort.port3:
+            case touchKeyPort.port3:
                 if (sensor == AvoidSensor.Sensor_1)
                     status = pins.digitalReadPin(DigitalPin.P16);
                 else
                     status = PC13;
                 break;
-            case extPort.port4:
-                if (sensor == AvoidSensor.Sensor_1)
-                    status = pins.digitalReadPin(DigitalPin.P20);
-                else
-                    status = pins.digitalReadPin(DigitalPin.P19);
-                break;
-            case extPort.port6:
+            case touchKeyPort.port6:
                 if (sensor == AvoidSensor.Sensor_1)
                     status = PA6;
                 else
                     status = PA7;
                 break;
-            case extPort.port7:
+            case touchKeyPort.port7:
             if (sensor == AvoidSensor.Sensor_1)
                 status = PA3;
             else
                 status = PA2;
             break;
-            case extPort.port8:
+            case touchKeyPort.port8:
             if (sensor == AvoidSensor.Sensor_1)
                 status = PB0;
             else
                 status = PB1;
                 break;
-            case extPort.port9:
-                if (sensor == AvoidSensor.Sensor_1)
-                    status = pins.digitalReadPin(DigitalPin.P20);
-                else
-                    status = pins.digitalReadPin(DigitalPin.P19);
             break;
         }   
         return status;
@@ -1085,37 +1074,32 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
 * Get the condition of the line follower sensor
 */
     //% weight=85 blockId=qdee_readLineFollowerStatus block="Line follower status|port %port|%status"
-    export function qdee_readLineFollowerStatus(port: extPort, status: qdee_lineFollower): boolean {
+    export function qdee_readLineFollowerStatus(port: touchKeyPort, status: qdee_lineFollower): boolean {
         let s1 = 0;
         let s2 = 0;
         switch (port)
         {
-            case extPort.port1:
+            case touchKeyPort.port1:
                 s1 = pins.digitalReadPin(DigitalPin.P1);
                 s2 = pins.digitalReadPin(DigitalPin.P2);
                 break;
-            case extPort.port2:
+            case touchKeyPort.port2:
                 s1 = pins.digitalReadPin(DigitalPin.P13);
                 s2 = pins.digitalReadPin(DigitalPin.P14);
                 break;
-            case extPort.port3:
+            case touchKeyPort.port3:
                 s1 = pins.digitalReadPin(DigitalPin.P16);
                 s2 = PC13;
                 break; 
-            case extPort.port4:
-            case extPort.port9:    
-                s1 = pins.digitalReadPin(DigitalPin.P20);
-                s2 = pins.digitalReadPin(DigitalPin.P19);
-                break; 
-            case extPort.port6:
+            case touchKeyPort.port6:
                 s1 = PA6;
                 s2 = PA7;
                 break;  
-            case extPort.port7:
+            case touchKeyPort.port7:
                 s1 = PA3;
                 s2 = PA2;
                 break;  
-            case extPort.port8:
+            case touchKeyPort.port8:
                 s1 = PB0;
                 s2 = PB1;
                 break;  
