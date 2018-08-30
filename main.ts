@@ -58,11 +58,7 @@ namespace qdee {
         //% block="Port 1"
         port1 = 0x01,
         //% block="Port 2"
-        port2 = 0x02,    
-        //% block="Port 4"
-        port4 = 0x04,    
-        //% block="Port 9"
-        port9 = 0x09,         
+        port2 = 0x02,       
     }
 
     export enum ultrasonicPort {
@@ -1044,7 +1040,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
  * @param speed the speed of the fan in -100~100. eg: 80
  */
     //% weight=86 blockId=qdee_fan_speed block="Set the fan|port %port|speed %speed"
-    // speed.min=-100 speed.max=100
+    //% speed.min=-100 speed.max=100
     export function qdee_fan_speed(port: fanPort,speed: number) {
         let pin1Clock = 0;
         let pin2Clock = 0;
@@ -1070,11 +1066,6 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
             case fanPort.port2:
                 pins.analogWritePin(AnalogPin.P13, pin1Clock);
                 pins.analogWritePin(AnalogPin.P14, pin2Clock);
-                break;
-            case fanPort.port4:
-            case fanPort.port9:
-                pins.analogWritePin(AnalogPin.P20, pin1Clock);
-                pins.analogWritePin(AnalogPin.P19, pin2Clock);
                 break;
         }
     }
