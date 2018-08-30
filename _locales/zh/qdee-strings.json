@@ -76,7 +76,7 @@
 	"qdee.qdee_ext_output|block":"设置扩展口|管脚 %pin|%out",
 	"qdee.qdee_ext_io_status|block":"扩展口状态 %pin",
 	"qdee.qdee_ir_learn_mode|block":"设置Qdee红外进入学习模式,学习码编号(1~10) %num",
-	"qdee.qdee_send_ir_data|block":"Qdee发送红外自定义码|地址码 %address|码值 %num",
+	"qdee.qdee_send_ir_data|block":"Qdee发送红外自定义码|地址 %address|码值 %num",
 	"qdee.qdee_send_learn_data|block":"Qdee发送红外学习码,学习码编号 %num",
 	"qdee.qdee_send_remote_data|block":"Qdee发送遥控器码|按键 %irKey|",
 	"qdee.qdee_lineFollower.S1_IN_S2_IN|block":"传感器1和传感器2在黑线内",
