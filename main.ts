@@ -306,6 +306,7 @@ namespace qdee {
     let PB1_ad = 0;
 
     let MESSAGE_HEAD = 0xff;
+    let MESSAGE_TOUCHKEY = 0x100;
 
     let i2cPortValid: boolean = true;    
     /**
@@ -1128,11 +1129,21 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
         }     
     }
     
+    /**
+     * Do something when a button is pushed down and released again.
+     * @param port the button port
+     * @param body code to run when event is raised
+     */
+    //% weight=84 blockId=onQdee_touchkey_pressed block="on touch button|port %port|is pressed"
+    export function onQdee_touchkey_pressed(port: touchKeyPort, body: Action) {
+            qdee_touchButton(port);
+            control.onEvent(MESSAGE_TOUCHKEY, 1,body);
+    }
+
 /**
 * Get the condition of the touch button
 */
-    //% weight=84 blockId=qdee_touchButton block="Touch button|port %port|is pressed"
-    export function qdee_touchButton(port: touchKeyPort): boolean {
+    function qdee_touchButton(port: touchKeyPort) {
         let status: boolean = false;
         switch (port)
         {
@@ -1158,7 +1169,8 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
                 status = !PB0;
                 break;  
         }
-        return status;
+        if (status)
+            control.raiseEvent(MESSAGE_TOUCHKEY, 1);
     } 
 
     let distanceBak = 0;

@@ -106,7 +106,6 @@
 	"qdee.qdee_avoidSensor|block":"避障传感器|接口 %port|%sensor|检测到障碍物",
 	"qdee.qdee_fan_speed|block":"设置风扇|接口 %port|速度 %speed",
 	"qdee.qdee_readLineFollowerStatus|block":"巡线传感器|接口 %port|%status",
-	"qdee.qdee_touchButton|block":"触摸按钮|接口 %port|按下",
 	"qdee.qdee_ultrasonic|block":"超声波模块|接口 %port|测试到障碍物距离(Cm)",
 	"qdee.knobPort.port1|block":"接口1",
 	"qdee.knobPort.port6|block":"接口6",
@@ -118,5 +117,6 @@
 	"qdee.touchKeyPort.port3|block":"接口3",
 	"qdee.touchKeyPort.port6|block":"接口6",
 	"qdee.touchKeyPort.port7|block":"接口7",
-	"qdee.touchKeyPort.port8|block":"接口8"
+	"qdee.touchKeyPort.port8|block":"接口8",
+	"qdee.onQdee_touchkey_pressed|block":"当触摸按键|接口 %port|按下"
 }
