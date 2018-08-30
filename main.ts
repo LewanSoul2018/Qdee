@@ -123,6 +123,19 @@ namespace qdee {
         port8 = 0x08
     }
 
+    export enum lineFollowPort {
+        //% block="Port 1"
+        port1 = 0x01,
+        //% block="Port 2"
+        port2 = 0x02,
+        //% block="Port 6"
+        port6 = 0x06,       
+        //% block="Port 7"
+        port7 = 0x07,
+        //% block="Port 8"
+        port8 = 0x08
+    }
+
     export enum extAddress {
         //% block="address 1"
         adress_1 = 0xFE,
@@ -151,6 +164,13 @@ namespace qdee {
         Low = 0x00,
         //% block="High"
         Hight = 0x01
+    }
+
+    export enum LineFollowerSensor {
+        //% block="Sensor 1"
+        LFSensor_1 = 0x00,
+        //% block="Sensor 2"
+        LFSensor_2 = 0x01        
     }
 
     export enum IRKEY {
@@ -1123,10 +1143,51 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
             return false;
         }     
     }
+
+    /**
+     * Get the line follower sensor port ad value
+     */
+    //% weight=84 blockId=qdee_lineSensorValue block="Get line follower sensor|port %port|%sensor|ad value"
+    export function qdee_lineSensorValue(port: lineFollowPort, sensor: LineFollowerSensor): number {
+        let s1 = 0;
+        let s2 = 0;
+        switch (port)
+        {
+            case lineFollowPort.port1:
+                s1 = pins.analogReadPin(AnalogPin.P1);
+                s2 = pins.analogReadPin(AnalogPin.P2);
+                break;
+            case lineFollowPort.port2:
+                s1 = pins.analogReadPin(AnalogPin.P13);
+                s2 = pins.analogReadPin(AnalogPin.P14);
+                break;
+            case lineFollowPort.port6:
+                s1 = PA6_ad;
+                s2 = PA7_ad;
+                break;  
+            case lineFollowPort.port7:
+                s1 = PA3_ad;
+                s2 = PA2_ad;
+                break;  
+            case lineFollowPort.port8:
+                s1 = PB0_ad;
+                s2 = PB1_ad;
+                break;  
+        }
+        if (sensor == LineFollowerSensor.LFSensor_1)
+        {
+            return 255 - s1;
+        }
+        else
+        {
+            return 255 - s2;    
+        }
+
+    }
 /**
 * Get the condition of the touch button,press return 1,or return 0
 */
-    //% weight=84 blockId=qdee_touchButton block=" Touch button|port %port|is pressed"    
+    //% weight=83 blockId=qdee_touchButton block=" Touch button|port %port|is pressed"    
     export function qdee_touchButton(port: touchKeyPort): boolean {
         let status: boolean = false;
         switch (port)
@@ -1160,7 +1221,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
   /**
    * Get the distance of ultrasonic detection to the obstacle 
    */  
-//% weight=83 blockId=qdee_ultrasonic  block="Ultrasonic|port %port|distance(cm)"
+//% weight=82 blockId=qdee_ultrasonic  block="Ultrasonic|port %port|distance(cm)"
     export function qdee_ultrasonic(port: ultrasonicPort): number {
         let trigPin: DigitalPin = DigitalPin.P1;
         switch (port)
@@ -1195,7 +1256,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
 /**
 * Get the ad value of the knob moudule
 */
-    //% weight=82 blockId=qdee_getKnobValue blockGap=50 block="Get knob|port %port|value(0~255)"
+    //% weight=81 blockId=qdee_getKnobValue blockGap=50 block="Get knob|port %port|value(0~255)"
     export function qdee_getKnobValue(port: knobPort): number {
         let adValue = 0;
         switch (port)
