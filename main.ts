@@ -126,8 +126,6 @@ namespace qdee {
     export enum lineFollowPort {
         //% block="Port 1"
         port1 = 0x01,
-        //% block="Port 2"
-        port2 = 0x02,
         //% block="Port 6"
         port6 = 0x06,       
         //% block="Port 7"
@@ -1156,12 +1154,6 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
             case lineFollowPort.port1:
                 s1 = pins.analogReadPin(AnalogPin.P1);
                 s2 = pins.analogReadPin(AnalogPin.P2);
-                s1 = s1 * 255 / 1023;
-                s2 = s2 * 255 / 1023;
-                break;
-            case lineFollowPort.port2:
-                s1 = pins.analogReadPin(AnalogPin.P13);
-                s2 = pins.analogReadPin(AnalogPin.P14);
                 s1 = s1 * 255 / 1023;
                 s2 = s2 * 255 / 1023;
                 break;

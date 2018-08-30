@@ -125,7 +125,6 @@
 	"qdee.LineFollowerSensor.LFSensor_1|block":"巡线传感器1",
 	"qdee.LineFollowerSensor.LFSensor_2|block":"巡线传感器2",
 	"qdee.lineFollowPort.port1|block":"接口1",
-	"qdee.lineFollowPort.port2|block":"接口2",
 	"qdee.lineFollowPort.port6|block":"接口6",
 	"qdee.lineFollowPort.port7|block":"接口7",
 	"qdee.lineFollowPort.port8|block":"接口8"
