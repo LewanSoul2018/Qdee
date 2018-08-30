@@ -387,6 +387,10 @@ namespace qdee {
                     PB10 = arg6Int;    
                 }
             }  
+            if (cmd.compare("IROK") == 0)
+            {
+                music.playTone(262, music.beat(BeatFraction.Whole));
+            }
         }
         handleCmd = "";
     }
@@ -1144,7 +1148,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
                 status = !pins.digitalReadPin(DigitalPin.P13);
                 break;
             case touchKeyPort.port3:
-                pins.setPull(DigitalPin.P13, PinPullMode.PullUp);
+                pins.setPull(DigitalPin.P16, PinPullMode.PullUp);
                 status = !pins.digitalReadPin(DigitalPin.P16);
                 break;
             case touchKeyPort.port6:
