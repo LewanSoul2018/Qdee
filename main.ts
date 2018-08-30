@@ -984,48 +984,29 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
 /**
 * Get the obstacle avoidance sensor status,1 detect obstacle,0 no detect obstacle
 */   
-   //% weight=87 blockId=qdee_avoidSensor block="Obstacle avoidance sensor|port %port|%sensor|detect obstacle"
-    export function qdee_avoidSensor(port: touchKeyPort,sensor: AvoidSensor): number {
+   //% weight=87 blockId=qdee_avoidSensor block="Obstacle avoidance sensor|port %port|detect obstacle"
+    export function qdee_avoidSensor(port: touchKeyPort): number {
         let status = 0;
         switch (port)
         {
             case touchKeyPort.port1:
-                if (sensor == AvoidSensor.Sensor_1)
-                    status = pins.digitalReadPin(DigitalPin.P1);
-                else
-                status = pins.digitalReadPin(DigitalPin.P2);
+                status = pins.digitalReadPin(DigitalPin.P1);
                 break;
             case touchKeyPort.port2:
-                if (sensor == AvoidSensor.Sensor_1)
-                    status = pins.digitalReadPin(DigitalPin.P13);
-                else
-                    status = pins.digitalReadPin(DigitalPin.P14);
+                status = pins.digitalReadPin(DigitalPin.P13);
                 break;
             case touchKeyPort.port3:
-                if (sensor == AvoidSensor.Sensor_1)
-                    status = pins.digitalReadPin(DigitalPin.P16);
-                else
-                    status = PC13;
+                status = pins.digitalReadPin(DigitalPin.P16);
                 break;
             case touchKeyPort.port6:
-                if (sensor == AvoidSensor.Sensor_1)
-                    status = PA6;
-                else
-                    status = PA7;
+                status = PA6;
                 break;
             case touchKeyPort.port7:
-            if (sensor == AvoidSensor.Sensor_1)
                 status = PA3;
-            else
-                status = PA2;
                 break;
             case touchKeyPort.port8:
-            if (sensor == AvoidSensor.Sensor_1)
                 status = PB0;
-            else
-                status = PB1;
                 break;
-            break;
         }   
         return status;
     }
