@@ -985,8 +985,9 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
 * Get the obstacle avoidance sensor status,1 detect obstacle,0 no detect obstacle
 */   
    //% weight=87 blockId=qdee_avoidSensor block="Obstacle avoidance sensor|port %port|detect obstacle"
-    export function qdee_avoidSensor(port: touchKeyPort): number {
+    export function qdee_avoidSensor(port: touchKeyPort): boolean {
         let status = 0;
+        let flag: boolean = false;
         switch (port)
         {
             case touchKeyPort.port1:
@@ -1008,7 +1009,11 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
                 status = PB0;
                 break;
         }   
-        return status;
+        if (status == 1)
+            flag = true;
+        else
+            flag = false;
+        return flag;
     }
 
 /**
