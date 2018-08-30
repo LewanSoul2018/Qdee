@@ -1010,9 +1010,9 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
                 break;
         }   
         if (status == 1)
-            flag = true;
-        else
             flag = false;
+        else
+            flag = true;
         return flag;
     }
 
