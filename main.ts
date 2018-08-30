@@ -1141,9 +1141,10 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
     }
 
 /**
-* Get the condition of the touch button
+* Get the condition of the touch button,press return 1,or return 0
 */
-    function qdee_touchButton(port: touchKeyPort) {
+    //% weight=84 blockId=qdee_touchButton block=" Touch button|port %port|is pressed"    
+    function qdee_touchButton(port: touchKeyPort): boolean {
         let status: boolean = false;
         switch (port)
         {
@@ -1169,8 +1170,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
                 status = !PB0;
                 break;  
         }
-        if (status)
-            control.raiseEvent(MESSAGE_TOUCHKEY, 1);
+        return status;
     } 
 
     let distanceBak = 0;
