@@ -389,7 +389,7 @@ namespace qdee {
             }  
             if (cmd.compare("IROK") == 0)
             {
-                music.playTone(262, music.beat(BeatFraction.Whole));
+                music.playTone(988, music.beat(BeatFraction.Quarter));
             }
         }
         handleCmd = "";
@@ -1120,7 +1120,14 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
                 s2 = PB1;
                 break;  
         }
-
+        if (s1 == 0)
+            s1 = 1;
+        else
+            s1 = 0;
+        if (s2 == 0)
+            s2 = 1;
+        else
+            s2 = 0;
         let s = ((1 & s1) << 1) | s2;
         if (s == status)
         {
