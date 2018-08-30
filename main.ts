@@ -1156,10 +1156,14 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
             case lineFollowPort.port1:
                 s1 = pins.analogReadPin(AnalogPin.P1);
                 s2 = pins.analogReadPin(AnalogPin.P2);
+                s1 = s1 * 255 / 1023;
+                s2 = s2 * 255 / 1023;
                 break;
             case lineFollowPort.port2:
                 s1 = pins.analogReadPin(AnalogPin.P13);
                 s2 = pins.analogReadPin(AnalogPin.P14);
+                s1 = s1 * 255 / 1023;
+                s2 = s2 * 255 / 1023;
                 break;
             case lineFollowPort.port6:
                 s1 = PA6_ad;
