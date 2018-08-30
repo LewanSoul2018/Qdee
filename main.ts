@@ -1018,7 +1018,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
                 status = PA3;
             else
                 status = PA2;
-            break;
+                break;
             case touchKeyPort.port8:
             if (sensor == AvoidSensor.Sensor_1)
                 status = PB0;
@@ -1092,16 +1092,34 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
                 s2 = PC13;
                 break; 
             case touchKeyPort.port6:
-                s1 = PA6;
-                s2 = PA7;
+                if (PA6_ad < 100)
+                    s1 = 0;
+                else
+                    s1 = 1;
+                if (PA7_ad < 100)
+                    s2 = 0;
+                else
+                    s2 = 1;
                 break;  
             case touchKeyPort.port7:
-                s1 = PA3;
-                s2 = PA2;
+                if (PA3_ad < 100)
+                s1 = 0;
+            else
+                s1 = 1;
+            if (PA2_ad < 100)
+                s2 = 0;
+            else
+                s2 = 1;
                 break;  
             case touchKeyPort.port8:
-                s1 = PB0;
-                s2 = PB1;
+                if (PB0_ad < 100)
+                    s1 = 0;
+                else
+                    s1 = 1;
+                if (PB1_ad < 100)
+                    s2 = 0;
+                else
+                    s2 = 1;
                 break;  
         }
         if (s1 == 0)
