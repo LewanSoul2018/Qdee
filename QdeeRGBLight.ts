@@ -91,50 +91,6 @@ namespace QdeeRGBLight {
                 || pixeloffset >= this._length)
                 return;
             let tureRgb = 0;
-        
-            if (pixeloffset == 2 || pixeloffset == 3)
-            {
-                switch (rgb)
-                {
-                    case QdeeRGBColors.Red:
-                        tureRgb = 0x00FF00;
-                        break;    
-    
-                    case QdeeRGBColors.Orange:
-                        tureRgb = 0xA5FF00;    
-                        break;    
-    
-                    case QdeeRGBColors.Yellow:
-                        tureRgb = 0xFFFF00;
-                        break;    
-                        
-                    case QdeeRGBColors.Green:
-                        tureRgb = 0xFF0000;    
-                        break;    
-    
-                    case QdeeRGBColors.Blue:
-                        tureRgb = 0x0000FF;
-                        break;    
-                        
-                    case QdeeRGBColors.Indigo:
-                        tureRgb = 0x004b82;    
-                        break;    
-    
-                    case QdeeRGBColors.Violet:
-                        tureRgb = 0x2B8AE2;
-                        break;    
-                        
-                    case QdeeRGBColors.Purple:
-                        tureRgb = 0x00FFFF;    
-                        break;   
-    
-                    case QdeeRGBColors.White:
-                        tureRgb = 0xFFFFFF;    
-                        break;   
-                }
-            }
-            else
-            {
                 switch (rgb)
                 {
                     case QdeeRGBColors.Red:
@@ -173,8 +129,6 @@ namespace QdeeRGBLight {
                         tureRgb = 0xFFFFFF;    
                         break;   
                 }
-       
-            }
 
             let stride = this._mode === QdeeRGBPixelMode.RGBW ? 4 : 3;
             pixeloffset = (pixeloffset + this.start) * stride;
