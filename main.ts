@@ -991,12 +991,15 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
         switch (port)
         {
             case touchKeyPort.port1:
+                pins.setPull(DigitalPin.P1, PinPullMode.PullUp);
                 status = pins.digitalReadPin(DigitalPin.P1);
                 break;
             case touchKeyPort.port2:
+                pins.setPull(DigitalPin.P13, PinPullMode.PullUp);
                 status = pins.digitalReadPin(DigitalPin.P13);
                 break;
             case touchKeyPort.port3:
+                pins.setPull(DigitalPin.P16, PinPullMode.PullUp);
                 status = pins.digitalReadPin(DigitalPin.P16);
                 break;
             case touchKeyPort.port6:
