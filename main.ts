@@ -549,12 +549,12 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
 }
     
     /**
-     * Do something when a button is pushed down and released again.
+     * Do someting when Qdee receive custom ir code
      * @param address the message id
      * @param code the button that needs to be pressed
      * @param body code to run when event is raised
      */
-    //% weight=97 blockId=onQdee_custom_ir_pressed block="on ir button receive|%address|code %code"
+    //% weight=97 blockId=onQdee_custom_ir_pressed block="on ir receive|%address|code %code"
     export function onQdee_custom_ir_pressed(address: extAddress,code: number , body: Action) {
         control.onEvent(address,code,body);
     }
@@ -562,7 +562,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
 /**
 * Let Qdee send ir custom data
 */
-  //% weight=96 blockId=qdee_send_ir_data block="Let Qdee send custom ir|address %address|code %num"
+  //% weight=96 blockId=qdee_send_ir_data block="Let Qdee send custom ir|%address|code %num"
   //% num.min=0 num.max=254  
   export function qdee_send_ir_data(address: extAddress,num: number)
   {
@@ -581,7 +581,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
     }
 
     /**
-     * Do something when a button is pushed down and released again.
+     * Do someting when Qdee receive remote-control code
      * @param code the ir key button that needs to be pressed
      * @param body code to run when event is raised
      */
@@ -593,7 +593,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
 /**
 * Let Qdee send ir remote-control data
 */
-  //% weight=94 blockGap=50 blockId=qdee_send_remote_data block="Let Qdee send ir remote-control|key %irKey|"
+  //% weight=94 blockId=qdee_send_remote_data block="Let Qdee send ir remote-control|key %irKey|"
   export function qdee_send_remote_data(irKey: IRKEY)
   {
       let buf = pins.createBuffer(8);
