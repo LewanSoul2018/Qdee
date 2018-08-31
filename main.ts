@@ -554,45 +554,15 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
      * @param code the button that needs to be pressed
      * @param body code to run when event is raised
      */
-    //% weight=97 blockId=onQdee_custom_ir_pressed block="on ir button|%address|code %code|pressed"
+    //% weight=97 blockId=onQdee_custom_ir_pressed block="on ir button receive|%address|code %code"
     export function onQdee_custom_ir_pressed(address: extAddress,code: number , body: Action) {
         control.onEvent(address,code,body);
     }
 
-    /**
-     * Do something when a button is pushed down and released again.
-     * @param code the ir key button that needs to be pressed
-     * @param body code to run when event is raised
-     */
-    //% weight=96 blockId=onQdee_remote_ir_pressed block="on remote-control|%code|pressed"
-    export function onQdee_remote_ir_pressed(code: IRKEY,body: Action) {
-        control.onEvent(MESSAGE_HEAD,code,body);
-    }
-
-/**
-* Set ir enter learn mode
-* @param num number of the learn code in 1-10. eg: 1
-*/
-  //% weight=95 blockId=qdee_ir_learn_mode block="Set ir enter learn mode,code number(1~10) %num"   
-//% num.min=1 num.max=10    
-  export function qdee_ir_learn_mode(num: number)
-  {
-      if (num < 1 || num > 10)
-          return;
-      let buf = pins.createBuffer(6);
-      buf[0] = 0x55;
-      buf[1] = 0x55;
-      buf[2] = 0x04;
-      buf[3] = 0x3E;//cmd type
-      buf[4] = 0x03;
-      buf[5] = num - 1;
-      serial.writeBuffer(buf);
-  }
- 
 /**
 * Let Qdee send ir custom data
 */
-  //% weight=94 blockId=qdee_send_ir_data block="Let Qdee send custom ir|address %address|data %num"
+  //% weight=96 blockId=qdee_send_ir_data block="Let Qdee send custom ir|address %address|code %num"
   //% num.min=0 num.max=254  
   export function qdee_send_ir_data(address: extAddress,num: number)
   {
@@ -609,12 +579,44 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
       buf[7] = 0;
       serial.writeBuffer(buf);
     }
+
+    /**
+     * Do something when a button is pushed down and released again.
+     * @param code the ir key button that needs to be pressed
+     * @param body code to run when event is raised
+     */
+    //% weight=95 blockId=onQdee_remote_ir_pressed block="on remote-control|%code|pressed"
+    export function onQdee_remote_ir_pressed(code: IRKEY,body: Action) {
+        control.onEvent(MESSAGE_HEAD,code,body);
+    }
+
+/**
+* Set ir enter learn mode
+* @param num number of the learn code in 1-10. eg: 1
+*/
+  //% weight=94 blockId=qdee_ir_learn_mode block="Set ir enter learning mode,code number(1~10) %num|"   
+//% num.min=1 num.max=10    
+  export function qdee_ir_learn_mode(num: number)
+  {
+      if (num < 1 || num > 10)
+          return;
+      let buf = pins.createBuffer(6);
+      buf[0] = 0x55;
+      buf[1] = 0x55;
+      buf[2] = 0x04;
+      buf[3] = 0x3E;//cmd type
+      buf[4] = 0x03;
+      buf[5] = num - 1;
+      serial.writeBuffer(buf);
+  }
+ 
+
     
 /**
 * Let Qdee send ir learn data
 * @param num number of the learn code in 1-10. eg: 1
 */
-  //% weight=93 blockId=qdee_send_learn_data block="Let Qdee send ir learn|number(1~10) %num|"
+  //% weight=93 blockId=qdee_send_learn_data block="Let Qdee send ir learning code,code|number(1~10) %num|"
   //% num.min=1 num.max=10  
   export function qdee_send_learn_data(num: number)
   {
