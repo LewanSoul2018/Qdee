@@ -1,6 +1,6 @@
 {
 	"qdee.qdee_Init":"Qdee板初始化，请在开机时执行",
-	"qdee.qdee_setBusServo": "设置总线舵机|编号 %index|角度 %angle|运行时间 %duration",
+	"qdee.qdee_setBusServo": "设置总线舵机运行，角度范围0~180",
 	"qdee.qdee_setMotorSpeed":"设置马达1和马达2的速度，速度范围-100到100，可控制坦克车行进和转弯",
 	"qdee.onQdee_custom_ir_pressed":"红外检测到指定的用户自定义的码值时触发",
 	"qdee.onQdee_remote_ir_pressed":"红外检测到指定的遥控器按键按下时触发",
