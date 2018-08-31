@@ -504,13 +504,13 @@ namespace qdee {
 * Set the angle of bus servo 1 to 8, range of 0~240 degree
 */
 //% weight=99 blockId=qdee_setBusServo block="Set bus servo|port %port|index %index|angle(0~240) %angle|duration %duration"
-//% angle.min=0 angle.max=240
+//% angle.min=0 angle.max=180
 export function qdee_setBusServo(port: busServoPort,index: number, angle: number, duration: number) {
-    if (angle > 240 || angle < 0)
+    if (angle > 180 || angle < 0)
     {
         return; 
     }    
-    let position = mapRGB(angle, 0, 240, 0, 1000);
+    let position = mapRGB(angle, 0, 180, 0, 1000);
    
    let buf = pins.createBuffer(10);
    buf[0] = 0x55;
