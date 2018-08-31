@@ -591,10 +591,27 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
     }
 
 /**
+* Let Qdee send ir remote-control data
+*/
+  //% weight=94 blockGap=50 blockId=qdee_send_remote_data block="Let Qdee send ir remote-control|key %irKey|"
+  export function qdee_send_remote_data(irKey: IRKEY)
+  {
+      let buf = pins.createBuffer(8);
+      buf[0] = 0x55;
+      buf[1] = 0x55;
+      buf[2] = 0x06;
+      buf[3] = 0x3E;//cmd type
+      buf[4] = 0x04;
+      buf[5] = irKey;
+      buf[6] = 0xFF;
+      buf[7] = 0;
+      serial.writeBuffer(buf);
+  }
+/**
 * Set ir enter learn mode
 * @param num number of the learn code in 1-10. eg: 1
 */
-  //% weight=94 blockId=qdee_ir_learn_mode block="Set ir enter learning mode,code number(1~10) %num|"   
+  //% weight=93 blockId=qdee_ir_learn_mode block="Set ir enter learning mode,code number(1~10) %num|"   
 //% num.min=1 num.max=10    
   export function qdee_ir_learn_mode(num: number)
   {
@@ -616,7 +633,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
 * Let Qdee send ir learn data
 * @param num number of the learn code in 1-10. eg: 1
 */
-  //% weight=93 blockId=qdee_send_learn_data block="Let Qdee send ir learning code,code|number(1~10) %num|"
+  //% weight=92 blockId=qdee_send_learn_data block="Let Qdee send ir learning code,code|number(1~10) %num|"
   //% num.min=1 num.max=10  
   export function qdee_send_learn_data(num: number)
   {
@@ -634,24 +651,6 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
       serial.writeBuffer(buf);
     }
     
-/**
-* Let Qdee send ir remote-control data
-*/
-  //% weight=92 blockGap=50 blockId=qdee_send_remote_data block="Let Qdee send ir remote-control|key %irKey|"
-  export function qdee_send_remote_data(irKey: IRKEY)
-  {
-      let buf = pins.createBuffer(8);
-      buf[0] = 0x55;
-      buf[1] = 0x55;
-      buf[2] = 0x06;
-      buf[3] = 0x3E;//cmd type
-      buf[4] = 0x04;
-      buf[5] = irKey;
-      buf[6] = 0xFF;
-      buf[7] = 0;
-      serial.writeBuffer(buf);
-  }
-
     
 /**
 * Get the volume level detected by the sound sensor, range 0 to 255
