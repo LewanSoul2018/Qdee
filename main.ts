@@ -1075,24 +1075,26 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
 * Get the condition of the line follower sensor
 */
     //% weight=85 blockId=qdee_readLineFollowerStatus block="Line follower status|port %port|%status"
-    export function qdee_readLineFollowerStatus(port: touchKeyPort, status: qdee_lineFollower): boolean {
+    export function qdee_readLineFollowerStatus(port: lineFollowPort, status: qdee_lineFollower): boolean {
         let s1 = 0;
         let s2 = 0;
         switch (port)
         {
-            case touchKeyPort.port1:
-                s1 = pins.digitalReadPin(DigitalPin.P1);
-                s2 = pins.digitalReadPin(DigitalPin.P2);
+            case lineFollowPort.port1:
+                s1 = pins.analogReadPin(AnalogPin.P1);
+                s2 = pins.analogReadPin(AnalogPin.P2);
+                s1 = s1 * 255 / 1023;
+                s2 = s2 * 255 / 1023;
+                if (s1 < 100)
+                    s1 = 0;
+                else
+                    s1 = 1;
+                if (s2 < 100)
+                    s2 = 0;
+                else
+                    s2 = 1;     
                 break;
-            case touchKeyPort.port2:
-                s1 = pins.digitalReadPin(DigitalPin.P13);
-                s2 = pins.digitalReadPin(DigitalPin.P14);
-                break;
-            case touchKeyPort.port3:
-                s1 = pins.digitalReadPin(DigitalPin.P16);
-                s2 = PC13;
-                break; 
-            case touchKeyPort.port6:
+            case lineFollowPort.port6:
                 if (PA6_ad < 100)
                     s1 = 0;
                 else
@@ -1102,7 +1104,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
                 else
                     s2 = 1;
                 break;  
-            case touchKeyPort.port7:
+            case lineFollowPort.port7:
                 if (PA3_ad < 100)
                 s1 = 0;
             else
@@ -1112,7 +1114,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
             else
                 s2 = 1;
                 break;  
-            case touchKeyPort.port8:
+            case lineFollowPort.port8:
                 if (PB0_ad < 100)
                     s1 = 0;
                 else
