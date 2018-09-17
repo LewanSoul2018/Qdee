@@ -12,7 +12,9 @@ namespace qdee {
         //% block="Blue"
         Blue = 0x03,
 	    //% block="Black"
-        Black = 0x04	
+        Black = 0x04,
+        //% block="White"
+        White = 0x05
     }
 
     export enum extPins {
@@ -969,25 +971,30 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
 		{
 			t = qdee_Colors.Blue;
          }
-        serial.writeNumber(r); 
-         serial.writeLine("->red");
-         serial.writeNumber(g); 
-         serial.writeLine("->green"); 
-         serial.writeNumber(b); 
-         serial.writeLine("->blue"); 
-        if(r < 40 && g < 40 && b < 40)
+        // serial.writeNumber(r); 
+        //  serial.writeLine("->red");
+        //  serial.writeNumber(g); 
+        //  serial.writeLine("->green"); 
+        //  serial.writeNumber(b); 
+        //  serial.writeLine("->blue"); 
+        if(r < 260 && g < 260 && b < 530)
 		{
             t = qdee_Colors.Black;
             return (color == t);
-		}
-		if (t == qdee_Colors.Blue && b > 250) {
+        }
+        else if (r > 3200 && g > 5000 && b > 7000)
+        {
+            t = qdee_Colors.White;
+            return (color == t);
+        }
+		if (t == qdee_Colors.Blue && b > 2000) {
            // serial.writeLine("blue");
             
 		}
-		else if (t == qdee_Colors.Green && g > 260) {
+		else if (t == qdee_Colors.Green && g > 1200) {
            // serial.writeLine("green");
 		}
-		else if (t == qdee_Colors.Red && r > 200) {
+		else if (t == qdee_Colors.Red && r > 1200) {
 			//serial.writeLine("red");
 		}
 		else
