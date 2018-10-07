@@ -1384,18 +1384,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
         }    
     }
 
-    function checkArgsInt(str: string): boolean {
-        let i = 0;
-        for (; i < str.length; i++)
-        {
-            if (str.charAt(i) < '0' || str.charAt(i) > '9')
-            {
-                return false;
-            }    
         }
-        return true;
-    }
-
     /**
      * Resolve the parameters that the phone APP send the command,there are 3 parameters of servo debug command,the other command has just one parameter.
      */
