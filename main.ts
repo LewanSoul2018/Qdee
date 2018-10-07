@@ -1356,35 +1356,26 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
      */
     //% weight=68 blockId=qdee_analyzeBluetoothCmd block="Get bluetooth command type %str"
     export function qdee_analyzeBluetoothCmd(str: string): number {
-        if (str.length > 9)
-        {
             let cmdHead = str.substr(0, 3);
             
-            if (cmdHead == "CMD")
-            {
+            if (cmdHead == "CMD") {
                 let cmdTypeStr: string = str.substr(4, 2);
                 let cmdType = strToNumber(cmdTypeStr);
-                if (cmdType > QdeeCmdType.VERSION || cmdType < 0)
-                {
-                    return QdeeCmdType.NO_COMMAND; 
-                } 
-                else
-                {
+                if (cmdType > QdeeCmdType.VERSION || cmdType < 0) {
+                    return QdeeCmdType.NO_COMMAND;
+                }
+                else {
                     return cmdType;
-                }    
+                }
             }
-            else
-            {
-                return QdeeCmdType.NO_COMMAND; 
-            }    
-        }   
-        else
-        {
-            return QdeeCmdType.NO_COMMAND;
-        }    
-    }
-
+            else {
+                return QdeeCmdType.NO_COMMAND;
+            }
         }
+        else {
+            return QdeeCmdType.NO_COMMAND;
+        }
+    }
     /**
      * Resolve the parameters that the phone APP send the command,there are 3 parameters of servo debug command,the other command has just one parameter.
      */
