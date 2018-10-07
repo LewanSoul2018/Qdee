@@ -1363,7 +1363,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
             if (cmdHead == "CMD")
             {
                 let cmdTypeStr: string = str.substr(4, 2);
-                {
+                let cmdType = strToNumber(cmdTypeStr);
                 if (cmdType > QdeeCmdType.VERSION || cmdType < 0)
                 {
                     return QdeeCmdType.NO_COMMAND; 
