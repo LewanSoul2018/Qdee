@@ -1363,12 +1363,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
             if (cmdHead == "CMD")
             {
                 let cmdTypeStr: string = str.substr(4, 2);
-                if (!checkArgsInt(cmdTypeStr))
                 {
-                    return QdeeCmdType.NO_COMMAND;
-                }    
-                let cmdType = parseInt(cmdTypeStr);
-
                 if (cmdType > QdeeCmdType.VERSION || cmdType < 0)
                 {
                     return QdeeCmdType.NO_COMMAND; 
@@ -1418,30 +1413,28 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
             if (index == 2)
             {
                 dataIndex = 10;
-                subLegth = 4;
+                subLegth = 2;
             }
             else if (index == 3)
             {
-                dataIndex = 15;
+                dataIndex = 13;
                 subLegth = 4;
             } 
             if (cmdType == QdeeCmdType.SERVO)
             {
-                if (str.length < 19)
+                if (str.length < 17)
                 {
                     return QdeeCmdType.NO_COMMAND;
                 }    
             }
-            if ((index == 1 && str.length < 10)||(index == 2 && str.length < 15)||(index == 3 && str.length < 19))
+            if ((index == 1 && str.length < 10)||(index == 2 && str.length < 13)||(index == 3 && str.length < 17))
             {
                 return 0;
             }    
-            let strArgs = str.substr(dataIndex, subLegth);
-            if (!checkArgsInt(strArgs))
-            {
+            let strArgs = str.substr(dataIndex, subLegth);  
+            let arg = strToNumber(strArgs);
+            if (arg == -1)
                 return 0;
-            }    
-            let arg = parseInt(strArgs);
             return arg;
         }
     }
