@@ -1356,6 +1356,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
      */
     //% weight=68 blockId=qdee_analyzeBluetoothCmd block="Get bluetooth command type %str"
     export function qdee_analyzeBluetoothCmd(str: string): number {
+        if (str.length > 9) {
             let cmdHead = str.substr(0, 3);
             
             if (cmdHead == "CMD") {
