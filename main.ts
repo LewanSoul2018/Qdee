@@ -251,7 +251,7 @@ namespace qdee {
         GAME = 16, 
         //% block="WIFI mode"
         WIFI_MODE = 17,
-        //% block="Get MAC"
+        //% block="Get mac"
         GET_MAC = 18
     }
 

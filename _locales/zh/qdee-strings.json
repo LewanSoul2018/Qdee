@@ -67,6 +67,7 @@
 	"qdee.QdeeCmdType.SOFA|block":"沙发状态",
 	"qdee.QdeeCmdType.GAME|block":"游戏",
 	"qdee.QdeeCmdType.WIFI_MODE|block":"Wifi模式",
+	"qdee.QdeeCmdType.GET_MAC|block":"查询mac地址命令",
 	"qdee.QdeeCarRunCmdType.STOP|block":"停止",
 	"qdee.QdeeCarRunCmdType.GO_AHEAD|block":"前进",
 	"qdee.QdeeCarRunCmdType.GO_BACK|block":"后退",
