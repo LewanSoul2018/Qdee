@@ -236,7 +236,23 @@ namespace qdee {
         //% block="Honk horn"
         DIDI = 9,
         //% block="Read firmware version"
-        VERSION = 10
+        VERSION = 10,
+        //% block="Remote control"
+        REMOTE = 11,
+        //% block="Learn code"
+        LEARN_CODE = 12,       
+        //% block="Read angle"
+        READ_ANGLE = 13,
+        //% block="Light belt"
+        RGB_BELT = 14,
+        //% block="Sofa status"
+        SOFA = 15,
+        //% block="Game data"
+        GAME = 16, 
+        //% block="WIFI mode"
+        WIFI_MODE = 17,
+        //% block="Get MAC"
+        GET_MAC = 18
     }
 
     export enum QdeeCarRunCmdType {
@@ -320,8 +336,12 @@ namespace qdee {
     let PB1_ad = 0;
 
     let MESSAGE_HEAD = 0xff;
+    let MESSAGE_MAC = 0x100;
 
-    let i2cPortValid: boolean = true;    
+    let i2cPortValid: boolean = true;
+    let connectStatus: boolean = false;
+
+    let macStr: string = "";
     /**
     * Get the handle command.
     */
@@ -404,6 +424,19 @@ namespace qdee {
             if (cmd.compare("IROK") == 0)
             {
                 music.playTone(988, music.beat(BeatFraction.Quarter));
+            }
+            if (cmd.length == 17)//判断是否是mac地址
+            {
+                macStr = cmd;
+                control.raiseEvent(MESSAGE_MAC, 1);
+            }
+            if (cmd.compare("WIFI_CONNECT") == 0)
+            {
+                connectStatus = true;    
+            }
+            if (cmd.compare("WIFI_DISCONNECT") == 0)
+            {
+                connectStatus = false;    
             }
         }
         handleCmd = "";
@@ -1461,11 +1494,82 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
     /**
      * Convert the battery value to the standard command and send it to the mobile phone. The APP displays the current voltage.
      */
-    //% weight=56 blockId=qdee_convertBattery block="Convert battery %data"
+    //% weight=56 blockId=qdee_convertBattery blockGap=50 block="Convert battery %data"
     export function qdee_convertBattery(data: number): string {
         let cmdStr: string = "CMD|07|";
         cmdStr += data.toString();
         cmdStr += "|$";
         return cmdStr;
+    }
+
+    /**
+     * Connect to the wifi
+     */
+    //% weight=55 blockId=qdee_connectWifi block="Connect to the Wifi,name|%ssid|and password %passwrd"
+    export function qdee_connectWifi(ssid: string, passwrd: string)
+    {
+
+        let buf = pins.createBuffer(ssid.length + passwrd.length + 10);
+        buf[0] = 0x55;
+        buf[1] = 0x55;
+        buf[2] = (ssid.length + passwrd.length + 8) & 0xff;
+        buf[3] = 0x3E;//cmd type
+        buf[4] = 0x6;
+        buf[5] = 0x22;
+        for (let i = 0; i < ssid.length; i++)
+        {
+            buf[6 + i] = ssid.charCodeAt(i);
+        }   
+        buf[ssid.length + 6] = 0x22;
+        buf[ssid.length + 7] = 0x2C;
+        buf[ssid.length + 8] = 0x22;
+        for (let i = 0; i < passwrd.length; i++)
+        {
+            buf[ssid.length + 9 + i] = passwrd.charCodeAt(i);
+        }   
+        buf[ssid.length + passwrd.length + 9] = 0x22;
+        serial.writeBuffer(buf);
+    }
+
+    /**
+     * Detect the device connect status
+     */
+    //% weight=54 blockId=qdee_isConnectedWifi block="Wifi is connected?"
+    export function qdee_isConnectedWifi(): boolean
+    {
+        return connectStatus;
+    }
+
+    /**
+     * Send get mac address command
+     */
+    //% weight=53 blockId=qdee_send_getMac block="Send get mac address command"
+    export function qdee_send_getMac()
+    {
+        let buf = pins.createBuffer(5);
+        buf[0] = 0x55;
+        buf[1] = 0x55;
+        buf[2] = 0x03;
+        buf[3] = 0x3E;//cmd type
+        buf[4] = 0x08;
+        serial.writeBuffer(buf);
+    }
+
+    /**
+     * Do someting when Qdee receive mac adress
+     * @param body code to run when event is raised
+     */
+    //% weight=52 blockId=onQdee_getMac block="On Qdee get mac address"
+    export function onQdee_getMac(body: Action) {
+        control.onEvent(MESSAGE_MAC,1,body);
+    }
+
+    /**
+     * Get device mac address
+     */
+    //% weight=51 blockId=qdee_getMacAddress block="Get mac address"
+    export function qdee_getMacAddress(): string
+    {
+        return macStr + "$";
     }
 }

@@ -60,6 +60,13 @@
 	"qdee.QdeeCmdType.BAT|block":"电量命令",
 	"qdee.QdeeCmdType.DIDI|block":"鸣笛命令",
 	"qdee.QdeeCmdType.VERSION|block":"读取固件信息命令",
+	"qdee.QdeeCmdType.REMOTE|block":"遥控器码",
+	"qdee.QdeeCmdType.LEARN_CODE|block":"学习码",
+	"qdee.QdeeCmdType.READ_ANGLE|block":"回读角度",
+	"qdee.QdeeCmdType.RGB_BELT|block":"控制灯带",
+	"qdee.QdeeCmdType.SOFA|block":"沙发状态",
+	"qdee.QdeeCmdType.GAME|block":"游戏",
+	"qdee.QdeeCmdType.WIFI_MODE|block":"Wifi模式",
 	"qdee.QdeeCarRunCmdType.STOP|block":"停止",
 	"qdee.QdeeCarRunCmdType.GO_AHEAD|block":"前进",
 	"qdee.QdeeCarRunCmdType.GO_BACK|block":"后退",
@@ -125,5 +132,10 @@
 	"qdee.lineFollowPort.port1|block":"接口1",
 	"qdee.lineFollowPort.port6|block":"接口6",
 	"qdee.lineFollowPort.port7|block":"接口7",
-	"qdee.lineFollowPort.port8|block":"接口8"
+	"qdee.lineFollowPort.port8|block":"接口8",
+	"qdee.qdee_connectWifi|block":"配置连接到Wifi,名称|%ssid|和密码 %passwrd",
+	"qdee.qdee_isConnectedWifi|block":"局域网是否连接成功？",
+	"qdee.qdee_send_getMac|block":"发送mac地址查询指令",
+	"qdee.onQdee_getMac|block":"当Qdee收到设备mac地址时执行",
+	"qdee.qdee_getMacAddress|block":"获取mac地址"
 }
