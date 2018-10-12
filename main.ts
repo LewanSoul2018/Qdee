@@ -438,6 +438,10 @@ namespace qdee {
             {
                 connectStatus = false;    
             }
+            if (cmd.compare("PEOPLE") == 0)//查询沙发状态指令
+            {
+
+            }
         }
         handleCmd = "";
     }
@@ -1543,7 +1547,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
     /**
      * Send get mac address command
      */
-    //% weight=53 blockId=qdee_send_getMac block="Send get mac address command"
+    //% weight=53 blockId=qdee_send_getMac block="Send pair command"
     export function qdee_send_getMac()
     {
         let buf = pins.createBuffer(5);
@@ -1559,7 +1563,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
      * Do someting when Qdee receive mac adress
      * @param body code to run when event is raised
      */
-    //% weight=52 blockId=onQdee_getMac block="On Qdee get mac address"
+    //% weight=52 blockId=onQdee_getMac block="On Qdee get device id"
     export function onQdee_getMac(body: Action) {
         control.onEvent(MESSAGE_MAC,1,body);
     }
@@ -1567,9 +1571,13 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
     /**
      * Get device mac address
      */
-    //% weight=51 blockId=qdee_getMacAddress block="Get mac address"
+    //% weight=51 blockId=qdee_getMacAddress block="Get device id"
     export function qdee_getMacAddress(): string
     {
         return macStr + "$";
     }
+
+    /**
+     * Send sofa status
+     */
 }

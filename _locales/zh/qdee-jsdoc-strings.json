@@ -35,7 +35,7 @@
 	"qdee.qdee_lineSensorValue":"获取巡线传感器的ad值",
 	"qdee.qdee_connectWifi":"配置Qdee的Wifi模块连接到网络",
 	"qdee.qdee_isConnectedWifi":"检测Qdee的Wifi模块是否连接成功",
-	"qdee.qdee_send_getMac":"发送查询mac地址指令",
-	"qdee.onQdee_getMac":"当收到mac地址时触发",
-	"qdee.qdee_getMacAddress":"获取到mac地址字符串"
+	"qdee.qdee_send_getMac":"发送配对请求",
+	"qdee.onQdee_getMac":"当收到设备ID时触发",
+	"qdee.qdee_getMacAddress":"获取到设备ID字符串，与蓝牙发送结合起来使用"
 }
