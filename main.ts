@@ -18,10 +18,6 @@ namespace qdee {
     }
 
     export enum extPins {
-        //% block="PA2"
-        pa2 = 0x02,
-        //% block="PA3"
-        pa3 = 0x03,
         //% block="PA6"
         pa6 = 0x06,
         //% block="PA7"
@@ -87,8 +83,6 @@ namespace qdee {
         port4 = 0x04,       
         //% block="Port 6"
         port6 = 0x06,       
-        //% block="Port 7"
-        port7 = 0x07,
         //% block="Port 8"
         port8 = 0x08,      
         //% block="Port 9"
@@ -100,8 +94,6 @@ namespace qdee {
         port1 = 0x01,
         //% block="Port 6"
         port6 = 0x06,       
-        //% block="Port 7"
-        port7 = 0x07,
         //% block="Port 8"
         port8 = 0x08
     }
@@ -115,8 +107,6 @@ namespace qdee {
         port3 = 0x03,        
         //% block="Port 6"
         port6 = 0x06,       
-        //% block="Port 7"
-        port7 = 0x07,
         //% block="Port 8"
         port8 = 0x08
     }
@@ -126,8 +116,6 @@ namespace qdee {
         port1 = 0x01,
         //% block="Port 6"
         port6 = 0x06,       
-        //% block="Port 7"
-        port7 = 0x07,
         //% block="Port 8"
         port8 = 0x08
     }
@@ -318,8 +306,6 @@ namespace qdee {
     let volume: number = 0;
     let lhRGBLight: QdeeRGBLight.LHQdeeRGBLight;
 
-    let PA2 = 2;
-    let PA3 = 2;
     let PA6 = 2;
     let PA7 = 2;
     let PB0 = 2;
@@ -328,8 +314,6 @@ namespace qdee {
     let PB11 = 2;
     let PC13 = 2;
 
-    let PA2_ad = 0;
-    let PA3_ad = 0;
     let PA6_ad = 0;
     let PA7_ad = 0;
     let PB0_ad = 0;
@@ -365,39 +349,50 @@ namespace qdee {
 
                 PA6_ad = arg1Int;
                 PA7_ad = arg2Int;
-                PA3_ad = arg3Int;
-                PA2_ad = arg4Int;
-                PB0_ad = arg5Int;
-                PB1_ad = arg6Int;   
+                PB0_ad = arg3Int;
+                PB1_ad = arg4Int;   
+
+                if (arg5Int != -1)
+                {
+                    currentVoltage = arg5Int*10353/200;
+                }  
+
+                if (arg6Int != -1)
+                {
+                    volume = arg6Int;
+                }   
                 
                 PA6 = checkADPortValue(arg1Int);
                 PA7 = checkADPortValue(arg2Int);
-                PA3 = checkADPortValue(arg3Int);
-                PA2 = checkADPortValue(arg4Int);
-                PB0 = checkADPortValue(arg5Int);
-                PB1 = checkADPortValue(arg6Int);
+                PB0 = checkADPortValue(arg3Int);
+                PB1 = checkADPortValue(arg4Int);
 
             }  
-            if (cmd.charAt(0).compare("B") == 0 && cmd.length == 12)
+            if (cmd.charAt(0).compare("B") == 0 && cmd.length == 16)
             {
                 let arg1Int: number = strToNumber(cmd.substr(1, 2));
                 let arg2Int: number = strToNumber(cmd.substr(3, 2));
-                let arg3Int: number = strToNumber(cmd.substr(5, 4));
-                let arg4Int: number = strToNumber(cmd.charAt(9));
-                let arg5Int: number = strToNumber(cmd.charAt(10));
-                let arg6Int: number = strToNumber(cmd.charAt(11));
-                if (arg1Int != -1)
-                {
-                    currentVoltage = arg1Int*10353/200;
-                }    
-                if (arg2Int != -1)
-                {
-                    volume = arg2Int;
-                }   
-                if (arg3Int != -1)
+                let arg3Int: number = strToNumber(cmd.substr(5, 2));
+                let arg4Int: number = strToNumber(cmd.substr(7, 2));
+                let arg5Int: number = strToNumber(cmd.substr(9, 4));
+                let arg6Int: number = strToNumber(cmd.charAt(9));
+                let arg7Int: number = strToNumber(cmd.charAt(10));
+                let arg8Int: number = strToNumber(cmd.charAt(11));
+  
+                PA6_ad = arg1Int;
+                PA7_ad = arg2Int;
+                PB0_ad = arg3Int;
+                PB1_ad = arg4Int;   
+
+                PA6 = checkADPortValue(arg1Int);
+                PA7 = checkADPortValue(arg2Int);
+                PB0 = checkADPortValue(arg3Int);
+                PB1 = checkADPortValue(arg4Int);
+
+                if (arg5Int != -1)
                 {   
-                    let high = (arg3Int >> 8) & 0xff;
-                    let low = arg3Int & 0xff;
+                    let high = (arg5Int >> 8) & 0xff;
+                    let low = arg5Int & 0xff;
                     if (low >= extAddress.adress_10 && low <= extAddress.adress_1)
                     {
                         control.raiseEvent(low,high);    
@@ -408,17 +403,17 @@ namespace qdee {
                     }
                     
                 }  
-                if (arg4Int != -1)
-                {
-                    PC13 = arg4Int;
-                }
-                if (arg5Int != -1)
-                {
-                    PB11 = arg5Int;
-                }
                 if (arg6Int != -1)
                 {
-                    PB10 = arg6Int;    
+                    PC13 = arg6Int;
+                }
+                if (arg7Int != -1)
+                {
+                    PB11 = arg7Int;
+                }
+                if (arg8Int != -1)
+                {
+                    PB10 = arg8Int;    
                 }
             }  
             if (cmd.compare("IROK") == 0)
@@ -1066,9 +1061,6 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
             case touchKeyPort.port6:
                 status = PA6;
                 break;
-            case touchKeyPort.port7:
-                status = PA3;
-                break;
             case touchKeyPort.port8:
                 status = PB0;
                 break;
@@ -1148,16 +1140,6 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
                 else
                     s2 = 1;
                 break;  
-            case lineFollowPort.port7:
-                if (PA3_ad < 100)
-                s1 = 0;
-            else
-                s1 = 1;
-            if (PA2_ad < 100)
-                s2 = 0;
-            else
-                s2 = 1;
-                break;  
             case lineFollowPort.port8:
                 if (PB0_ad < 100)
                     s1 = 0;
@@ -1199,10 +1181,6 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
                 s1 = PA6_ad;
                 s2 = PA7_ad;
                 break;  
-            case lineFollowPort.port7:
-                s1 = PA3_ad;
-                s2 = PA2_ad;
-                break;  
             case lineFollowPort.port8:
                 s1 = PB0_ad;
                 s2 = PB1_ad;
@@ -1240,9 +1218,6 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
                 break;
             case touchKeyPort.port6:
                 status = !PA6;
-                break;  
-            case touchKeyPort.port7:
-                status = !PA3;
                 break;  
             case touchKeyPort.port8:
                 status = !PB0;
@@ -1301,9 +1276,6 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
                 break;
             case knobPort.port6:
                 adValue = PA6_ad;
-                break;  
-            case knobPort.port7:
-                adValue = PA3_ad;
                 break;  
             case knobPort.port8:
                 adValue = PB0_ad;
