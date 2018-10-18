@@ -35,7 +35,34 @@ enum QdeeRGBColors {
     //% block="Light 5"
      Light5 = 0x04,
     //% block="Light 6"
-    Light6 = 0x05    
+     Light6 = 0x05,
+    //% block="All"
+     All = 0x06
+}
+
+enum QdeeLightsBelt {
+        //% block="Light 1"
+        Light1 = 0x00,
+        //% block="Light 2"
+        Light2 = 0x01,
+        //% block="Light 3"
+        Light3 = 0x02,
+        //% block="Light 4"
+         Light4 = 0x03,
+        //% block="Light 5"
+         Light5 = 0x04,
+        //% block="Light 6"
+        Light6 = 0x05,
+        //% block="Light 7"
+        Light7 = 0x06,
+        //% block="Light 8"
+        Light8 = 0x07,
+        //% block="Light 9"
+        Light9 = 0x08,
+        //% block="Light 10"
+        Light10 = 0x09,
+        //% block="All"
+        All = 0x0A
 }
 
 /**
@@ -83,7 +110,18 @@ namespace QdeeRGBLight {
         }
 
         setPixelColor(pixeloffset: number, rgb: QdeeRGBColors): void {
-            this.setPixelRGB(pixeloffset, rgb);
+            if (pixeloffset == this._length)//全部
+            {
+                for (let i = 0; i < this._length; i++)
+                {
+                    this.setPixelRGB(i, rgb);     
+                }
+            }
+            else
+            {
+                this.setPixelRGB(pixeloffset, rgb);
+            }
+            
         }
 
         private setPixelRGB(pixeloffset: number, rgb: QdeeRGBColors): void {

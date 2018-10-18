@@ -305,6 +305,7 @@ namespace qdee {
     let currentVoltage: number = 0;
     let volume: number = 0;
     let lhRGBLight: QdeeRGBLight.LHQdeeRGBLight;
+    let lhRGBLightBelt: QdeeRGBLight.LHQdeeRGBLight;
 
     let PA6 = 2;
     let PA7 = 2;
@@ -1314,7 +1315,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
          * @param brightness a measure of LED brightness in 0-255. eg: 255
     */
     //% blockId="qdee_setBrightness" block="set brightness %brightness"
-    //% weight=76
+    //% weight=80
     export function qdee_setBrightness(brightness: number): void {
         lhRGBLight.setBrightness(brightness);
     }
@@ -1322,7 +1323,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
     /**
      * Set the color of the colored lights, after finished the setting please perform  the display of colored lights.
      */
-    //% weight=74 blockId=qdee_setPixelRGB block="Set|%lightoffset|color to %rgb"
+    //% weight=79 blockId=qdee_setPixelRGB block="Set|%lightoffset|color to %rgb"
     export function qdee_setPixelRGB(lightoffset: QdeeLights, rgb: QdeeRGBColors)
     { 
         lhRGBLight.setPixelColor(lightoffset, rgb);
@@ -1332,7 +1333,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
     /**
      * Set RGB Color argument
      */
-    //% weight=72 blockId=qdee_setPixelRGBArgs block="Set|%lightoffset|color to %rgb"
+    //% weight=78 blockId=qdee_setPixelRGBArgs block="Set|%lightoffset|color to %rgb"
     export function qdee_setPixelRGBArgs(lightoffset: QdeeLights, rgb: number)
     {
         lhRGBLight.setPixelColor(lightoffset, rgb);
@@ -1342,7 +1343,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
     /**
      * Display the colored lights, and set the color of the colored lights to match the use. After setting the color of the colored lights, the color of the lights must be displayed.
      */
-    //% weight=70 blockId=qdee_showLight block="Show light"
+    //% weight=77 blockId=qdee_showLight block="Show light"
     export function qdee_showLight() {
         lhRGBLight.show();
     }
@@ -1350,11 +1351,62 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
     /**
      * Clear the color of the colored lights and turn off the lights.
      */
-    //% weight=69 blockGap=50 blockId=qdee_clearLight block="Clear light"
+    //% weight=76 blockGap=50 blockId=qdee_clearLight block="Clear light"
     export function qdee_clearLight() {
         lhRGBLight.clear();
     }
 
+    /**
+	 * Initialize Light belt
+	 */
+    //% weight=75 blockId=qdee_belt_initRGBLight block="Initialize light belt at port %port"
+    export function qdee_belt_initRGBLight(port: ultrasonicPort) {
+        switch (port)
+        {
+            case ultrasonicPort.port1:
+                if (!lhRGBLightBelt) {
+                    lhRGBLightBelt = QdeeRGBLight.create(DigitalPin.P1, 10, QdeeRGBPixelMode.RGB);
+                }
+                break;
+            case ultrasonicPort.port2:
+                if (!lhRGBLightBelt) {
+                    lhRGBLightBelt = QdeeRGBLight.create(DigitalPin.P13, 10, QdeeRGBPixelMode.RGB);
+                }
+                break;
+            case ultrasonicPort.port3:
+                if (!lhRGBLightBelt) {
+                    lhRGBLightBelt = QdeeRGBLight.create(DigitalPin.P16, 10, QdeeRGBPixelMode.RGB);
+                }
+                break;
+        }
+
+        qdee_clearLight();
+    }
+
+    /**
+     * Set the color of the colored lights, after finished the setting please perform  the display of colored lights.
+     */
+    //% weight=74 blockId=qdee_belt_setPixelRGB block="Set light belt|%lightoffset|color to %rgb"
+    export function qdee_belt_setPixelRGB(lightoffset: QdeeLightsBelt, rgb: QdeeRGBColors)
+    { 
+        lhRGBLightBelt.setPixelColor(lightoffset, rgb);
+     }
+    
+    /**
+     * Display the colored lights, and set the color of the colored lights to match the use. After setting the color of the colored lights, the color of the lights must be displayed.
+     */
+    //% weight=73 blockId=qdee_belt_showLight block="Show light belt"
+    export function qdee_belt_showLight() {
+        lhRGBLightBelt.show();
+    }
+
+    /**
+     * Clear the color of the colored lights and turn off the lights.
+     */
+    //% weight=72 blockGap=50 blockId=qdee_belt_clearLight block="Clear light belt"
+    export function qdee_belt_clearLight() {
+        lhRGBLightBelt.clear();
+    }
 
 	function mapRGB(x: number, in_min: number, in_max: number, out_min: number, out_max: number): number {
 		return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
