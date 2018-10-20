@@ -109,6 +109,23 @@ namespace QdeeRGBLight {
             // don't yield to avoid races on initialization
         }
 
+        setBeltPixelColor(pixeloffset: number, rgb: QdeeRGBColors): void {
+            if (pixeloffset == 10)//全部
+            {
+                for (let i = 0; i < this._length; i++)
+                {
+                    this.setPixelRGB(i, rgb);     
+                }
+            }
+            else
+            {
+                this.setPixelRGB(pixeloffset * 3, rgb);
+                this.setPixelRGB(pixeloffset * 3 + 1, rgb);
+                this.setPixelRGB(pixeloffset*3 + 2, rgb);
+            }
+            
+        }
+
         setPixelColor(pixeloffset: number, rgb: QdeeRGBColors): void {
             if (pixeloffset == this._length)//全部
             {

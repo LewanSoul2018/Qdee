@@ -417,6 +417,19 @@ namespace qdee {
                     PB10 = arg8Int;    
                 }
             }  
+            if (cmd.charAt(0).compare("C") == 0 && cmd.length == 11)
+            {
+                if (lhRGBLightBelt != null)
+                {
+                    for (let i = 0; i < 10; i++)
+                    {
+                        let color = converOneChar(cmd.charAt(i + 1));
+                        if(color != -1)
+                             lhRGBLightBelt.setPixelColor(i,color);
+                    }
+                    lhRGBLightBelt.show();
+                }
+            }
             if (cmd.compare("IROK") == 0)
             {
                 music.playTone(988, music.beat(BeatFraction.Quarter));
@@ -1365,17 +1378,17 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
         {
             case ultrasonicPort.port1:
                 if (!lhRGBLightBelt) {
-                    lhRGBLightBelt = QdeeRGBLight.create(DigitalPin.P1, 10, QdeeRGBPixelMode.RGB);
+                    lhRGBLightBelt = QdeeRGBLight.create(DigitalPin.P1, 30, QdeeRGBPixelMode.RGB);
                 }
                 break;
             case ultrasonicPort.port2:
                 if (!lhRGBLightBelt) {
-                    lhRGBLightBelt = QdeeRGBLight.create(DigitalPin.P13, 10, QdeeRGBPixelMode.RGB);
+                    lhRGBLightBelt = QdeeRGBLight.create(DigitalPin.P13, 30, QdeeRGBPixelMode.RGB);
                 }
                 break;
             case ultrasonicPort.port3:
                 if (!lhRGBLightBelt) {
-                    lhRGBLightBelt = QdeeRGBLight.create(DigitalPin.P16, 10, QdeeRGBPixelMode.RGB);
+                    lhRGBLightBelt = QdeeRGBLight.create(DigitalPin.P16, 30, QdeeRGBPixelMode.RGB);
                 }
                 break;
         }
@@ -1389,7 +1402,7 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
     //% weight=74 blockId=qdee_belt_setPixelRGB block="Set light belt|%lightoffset|color to %rgb"
     export function qdee_belt_setPixelRGB(lightoffset: QdeeLightsBelt, rgb: QdeeRGBColors)
     { 
-        lhRGBLightBelt.setPixelColor(lightoffset, rgb);
+        lhRGBLightBelt.setBeltPixelColor(lightoffset, rgb);
      }
     
     /**
