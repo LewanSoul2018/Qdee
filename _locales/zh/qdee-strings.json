@@ -143,7 +143,7 @@
 	"qdee.lineFollowPort.port6|block":"接口6",
 	"qdee.lineFollowPort.port8|block":"接口8",
 	"qdee.qdee_connectWifi|block":"配置连接到Wifi,名称|%ssid|和密码 %passwrd",
-	"qdee.qdee_isConnectedWifi|block":"局域网是否连接成功？",
+	"qdee.qdee_isConnectedServer|block":"设备连接服务器是否成功？",
 	"qdee.qdee_send_getMac|block":"发送配对请求",
 	"qdee.onQdee_getMac|block":"当Qdee收到设备ID时执行",
 	"qdee.qdee_getMacAddress|block":"设备ID",

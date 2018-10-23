@@ -1575,8 +1575,8 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
     /**
      * Detect the device connect status
      */
-    //% weight=54 blockId=qdee_isConnectedWifi block="Wifi is connected?"
-    export function qdee_isConnectedWifi(): boolean
+    //% weight=54 blockId=qdee_isConnectedServer block="Device is connected to server?"
+    export function qdee_isConnectedServer(): boolean
     {
         return connectStatus;
     }
