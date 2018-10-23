@@ -442,12 +442,10 @@ namespace qdee {
             if (cmd.compare("WIFI_S_CONNECT") == 0)
             {
                 connectStatus = true;    
-                serial.writeString("WIFI_OK");
             }
             if (cmd.compare("WIFI_S_DISCONNECT") == 0)
             {
                 connectStatus = false;    
-                serial.writeString("WIFI_ERRO");
             }
             if (cmd.compare("PEOPLE") == 0)//查询沙发状态指令
             {
@@ -1432,13 +1430,13 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
      */
     //% weight=68 blockId=qdee_analyzeBluetoothCmd block="Get bluetooth command type %str"
     export function qdee_analyzeBluetoothCmd(str: string): number {
-        if (str.length > 9) {
+        if (str.length > 6) {
             let cmdHead = str.substr(0, 3);
             
             if (cmdHead == "CMD") {
                 let cmdTypeStr: string = str.substr(4, 2);
                 let cmdType = strToNumber(cmdTypeStr);
-                if (cmdType > QdeeCmdType.VERSION || cmdType < 0) {
+                if (cmdType > QdeeCmdType.GET_MAC || cmdType < 0) {
                     return QdeeCmdType.NO_COMMAND;
                 }
                 else {
