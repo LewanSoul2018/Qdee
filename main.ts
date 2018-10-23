@@ -157,6 +157,13 @@ namespace qdee {
         LFSensor_2 = 0x01        
     }
 
+    export enum SofaStatus {
+        //% block="vacation"
+        VACATION = 0x00,
+        //% block="occupied"
+        OCCUPIED = 0x01
+    }
+
     export enum IRKEY {
         //% block="CH-"
         CH_MINUS=162,
@@ -1614,7 +1621,30 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
         return macStr + "$";
     }
 
+
     /**
      * Send sofa status
      */
+    //% weight=50 blockId=qdee_sendSofa block="Send sofa command %sofa"
+    export function qdee_sendSofa(sofa: SofaStatus)
+    {
+        let buf = pins.createBuffer(10);
+        buf[0] = 0x50;
+        buf[1] = 0x45;
+        buf[2] = 0x4F;
+        buf[3] = 0x50;//cmd type
+        buf[4] = 0x4C;
+        buf[5] = 0x45;
+        if (sofa == SofaStatus.VACATION)
+        {
+            buf[6] = 0x30;
+        }
+        else if (sofa == SofaStatus.OCCUPIED)
+        {
+            buf[7] = 0x31;
+        }
+        buf[8] = 0xd;
+        buf[9] = 0xa;
+        serial.writeBuffer(buf);
+    }
 }
