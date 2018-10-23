@@ -434,22 +434,24 @@ namespace qdee {
             {
                 music.playTone(988, music.beat(BeatFraction.Quarter));
             }
-            if (cmd.length == 17)//判断是否是mac地址
+            if (cmd.charAt(0).compare("M") == 0 && cmd.length == 18)
             {
-                macStr = cmd;
+                macStr = cmd.substr(1,17);
                 control.raiseEvent(MESSAGE_MAC, 1);
             }
             if (cmd.compare("WIFI_S_CONNECT") == 0)
             {
                 connectStatus = true;    
+                serial.writeString("WIFI_OK");
             }
             if (cmd.compare("WIFI_S_DISCONNECT") == 0)
             {
                 connectStatus = false;    
+                serial.writeString("WIFI_ERRO");
             }
             if (cmd.compare("PEOPLE") == 0)//查询沙发状态指令
             {
-
+                
             }
         }
         handleCmd = "";
