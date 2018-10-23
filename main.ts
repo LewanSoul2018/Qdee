@@ -439,11 +439,11 @@ namespace qdee {
                 macStr = cmd;
                 control.raiseEvent(MESSAGE_MAC, 1);
             }
-            if (cmd.compare("WIFI_CONNECT") == 0)
+            if (cmd.compare("WIFI_S_CONNECT") == 0)
             {
                 connectStatus = true;    
             }
-            if (cmd.compare("WIFI_DISCONNECT") == 0)
+            if (cmd.compare("WIFI_S_DISCONNECT") == 0)
             {
                 connectStatus = false;    
             }
