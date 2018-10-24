@@ -1628,23 +1628,28 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
     //% weight=50 blockId=qdee_sendSofa block="Send sofa command %sofa"
     export function qdee_sendSofa(sofa: SofaStatus)
     {
-        let buf = pins.createBuffer(9);
-        buf[0] = 0x50;
-        buf[1] = 0x45;
-        buf[2] = 0x4F;
-        buf[3] = 0x50;//cmd type
-        buf[4] = 0x4C;
-        buf[5] = 0x45;
+        let buf = pins.createBuffer(14);
+        buf[0] = 0x55;
+        buf[1] = 0x55;
+        buf[2] = 0x0C;
+        buf[3] = 0x3E;
+        buf[4] = 0x09;//cmd type
+        buf[5] = 0x50;
+        buf[6] = 0x45;
+        buf[7] = 0x4F;
+        buf[8] = 0x50;
+        buf[9] = 0x4C;
+        buf[10] = 0x45;
         if (sofa == SofaStatus.VACATION)
         {
-            buf[6] = 0x30;
+            buf[11] = 0x30;
         }
         else if (sofa == SofaStatus.OCCUPIED)
         {
-            buf[6] = 0x31;
+            buf[11] = 0x31;
         }
-        buf[7] = 0xd;
-        buf[8] = 0xa;
+        buf[12] = 0xd;
+        buf[13] = 0xa;
         serial.writeBuffer(buf);
     }
 }
