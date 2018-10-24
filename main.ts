@@ -432,7 +432,7 @@ namespace qdee {
                     {
                         let color = converOneChar(cmd.charAt(i + 1));
                         if(color != -1)
-                             lhRGBLightBelt.setPixelColor(i,color);
+                             lhRGBLightBelt.setBeltPixelColor(i,color);
                     }
                     lhRGBLightBelt.show();
                 }
