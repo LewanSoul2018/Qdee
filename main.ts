@@ -341,8 +341,8 @@ namespace qdee {
     let i2cPortValid: boolean = true;
     let connectStatus: boolean = false;
 
-    let servo1Angle: number = 0;
-    let servo2Angle: number = 0;
+    let servo1Angle: number = 0xfff;
+    let servo2Angle: number = 0xfff;
 
     let macStr: string = "";
     /**
@@ -469,19 +469,21 @@ namespace qdee {
             {
                 
             }
-            if (cmd.charAt(0).compare("S") == 0 && cmd.length == 8)
+            if (cmd.charAt(0).compare("S") == 0 && cmd.length == 5)
             {
-                let arg1Int: number = strToNumber(cmd.substr(1, 3));
-                let arg2Int: number = strToNumber(cmd.substr(5, 3));
-                if (arg1Int >= 0 && arg1Int <= 1000)
+                let arg1Int: number = strToNumber(cmd.substr(1, 1));
+                let arg2Int: number = strToNumber(cmd.substr(2, 3));
+                if (arg1Int == 1)
                 {
                     servo1Angle = arg1Int;
+                    control.raiseEvent(MESSAGE_ANGLE, 1);
                 }
-                if (arg2Int >= 0 && arg2Int <= 1000)
+                else if (arg1Int == 2)
                 {
                     servo2Angle = arg2Int;
+                    control.raiseEvent(MESSAGE_ANGLE, 2);
                 }
-                control.raiseEvent(MESSAGE_ANGLE, 1);
+                
             }
 
         }
@@ -610,15 +612,16 @@ export function qdee_setBusServo(port: busServoPort,index: number, angle: number
 /**
  * Send read qdee servos angle command
  */
-//% weight=98 blockId=qdee_readAngle block="Send read servos angle command "
-export function qdee_readAngle()
+//% weight=98 blockId=qdee_readAngle block="Send read|%servo|angle command "
+export function qdee_readAngle(servo: Servos)
 {
-    let buf = pins.createBuffer(5);
+    let buf = pins.createBuffer(6);
     buf[0] = 0x55;
     buf[1] = 0x55;
-    buf[2] = 0x03;
+    buf[2] = 0x04;
     buf[3] = 0x3E;//cmd type
     buf[4] = 0x05;
+    buf[5] = servo;
     serial.writeBuffer(buf);
 }
    
@@ -627,10 +630,10 @@ export function qdee_readAngle()
  * Do someting when Qdee receive angle
  * @param body code to run when event is raised
  */
- //% weight=97 blockId=onQdee_getAngle block="On Qdee get angle"
-export function onQdee_getAngle(body: Action) {
-        control.onEvent(MESSAGE_ANGLE,1,body);
-    }
+ //% weight=97 blockId=onQdee_getAngle block="On Qdee|%servo|get angle"
+export function onQdee_getAngle(servo: Servos,body: Action) {
+        control.onEvent(MESSAGE_ANGLE,servo,body);
+}
 
 
  /**
@@ -638,14 +641,14 @@ export function onQdee_getAngle(body: Action) {
   */
  //% weight=96 blockId=getServosAngle block="Get|%servo|angle"
     export function getServosAngle(servo: Servos): number {
-        if (servo == Servos.Servo1)
-        {
-            return servo1Angle;    
+        if (servo == Servos.Servo1) {
+            return servo1Angle;
         }
-        else if (servo == Servos.Servo2)
-        {
-            return servo2Angle;  
+        else if (servo == Servos.Servo2) {
+            return servo2Angle;
         }
+        else
+            return 0xFFF;
  }   
     
 /**

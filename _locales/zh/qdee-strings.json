@@ -156,6 +156,8 @@
 	"qdee.SofaStatus.OCCUPIED|block":"占用",
 	"qdee.Servos.Servo1|block":"舵机1",
 	"qdee.Servos.Servo2|block":"舵机2",
-	"qdee.qdee_readAngle|block":"读取舵机角度",
-	"qdee.getServosAngle|block":"获取|%servo|角度"
+	"qdee.qdee_readAngle|block":"发送读|%servo|角度命令",
+	"qdee.getServosAngle|block":"获取|%servo|角度",
+	"qdee.onQdee_getAngle|block":"当读取到|%servo|角度时执行"
+
 }
