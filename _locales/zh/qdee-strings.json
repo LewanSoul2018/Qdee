@@ -153,5 +153,9 @@
 	"qdee.qdee_belt_clearLight|block":"关闭灯带",
 	"qdee.qdee_sendSofa|block":"发送沙发状态指令 %sofa",
 	"qdee.SofaStatus.VACATION|block":"空闲",
-	"qdee.SofaStatus.OCCUPIED|block":"占用"
+	"qdee.SofaStatus.OCCUPIED|block":"占用",
+	"qdee.Servos.Servo1|block":"舵机1",
+	"qdee.Servos.Servo2|block":"舵机2",
+	"qdee.qdee_readAngle|block":"读取舵机角度",
+	"qdee.getServosAngle|block":"获取|%servo|角度"
 }
