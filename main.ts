@@ -472,15 +472,28 @@ namespace qdee {
             if (cmd.charAt(0).compare("S") == 0 && cmd.length == 5)
             {
                 let arg1Int: number = strToNumber(cmd.substr(1, 1));
-                let arg2Int: number = strToNumber(cmd.substr(2, 3));
+                let arg2Str = cmd.substr(2, 3);
+                if (arg2Str.compare("XXX"))
+                {
+                    return;
+                }
+                let arg2Int: number = 0;
+                if (!arg2Str.charAt(0).compare("F"))
+                {
+                    arg2Int = strToNumber(cmd.substr(2, 3));
+                }
+                if (arg2Int > 1000)
+                    arg2Int = 1000;
                 if (arg1Int == 1)
                 {
-                    servo1Angle = arg2Int;
+                    servo1Angle = mapRGB(arg2Int, 0, 1000, 0, 240);
+                    servo1Angle -= 120;
                     control.raiseEvent(MESSAGE_ANGLE, 1);
                 }
                 else if (arg1Int == 2)
                 {
-                    servo2Angle = arg2Int;
+                    servo2Angle = mapRGB(arg2Int, 0, 1000, 0, 240);
+                    servo2Angle -= 120;
                     control.raiseEvent(MESSAGE_ANGLE, 2);
                 }
                 
