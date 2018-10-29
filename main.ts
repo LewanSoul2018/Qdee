@@ -322,12 +322,8 @@ namespace qdee {
     let lhRGBLightBelt: QdeeRGBLight.LHQdeeRGBLight;
 
     let PA6 = 2;
-    let PA7 = 2;
     let PB0 = 2;
-    let PB1 = 2;
-    let PB10 = 2;
-    let PB11 = 2;
-    let PC13 = 2;
+
 
     let PA6_ad = 0;
     let PA7_ad = 0;
@@ -820,8 +816,6 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
     const APDS9960_AILTH  = 0x85;
     const APDS9960_AIHTL  = 0x86;
     const APDS9960_AIHTH  = 0x87;
-    const APDS9960_PILT = 0x89;
-    const APDS9960_PIHT = 0x8B;
     const APDS9960_PERS = 0x8C;
     const APDS9960_CONFIG1 = 0x8D;
     const APDS9960_PPULSE  = 0x8E;
@@ -837,7 +831,6 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
     const APDS9960_GDATAH  = 0x99;
     const APDS9960_BDATAL  = 0x9A;
     const APDS9960_BDATAH  = 0x9B;
-    const APDS9960_PDATA   = 0x9C;
     const APDS9960_POFFSET_UR = 0x9D;
     const APDS9960_POFFSET_DL = 0x9E;
     const APDS9960_CONFIG3 = 0x9F;
@@ -845,50 +838,30 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
 
     /* LED Drive values */
     const LED_DRIVE_100MA = 0;
-    const LED_DRIVE_50MA = 1;
-    const LED_DRIVE_25MA = 2;
-    const LED_DRIVE_12_5MA = 3;
+
 
     /* ALS Gain (AGAIN) values */
-    const AGAIN_1X = 0;
     const AGAIN_4X = 1;
-    const AGAIN_16X = 2;
-    const AGAIN_64X = 3;
+
     
     /* Default values */
     const DEFAULT_ATIME = 219;    // 103ms
     const DEFAULT_WTIME = 246;    // 27ms
     const DEFAULT_PROX_PPULSE = 0x87;    // 16us, 8 pulses
-    const DEFAULT_GESTURE_PPULSE = 0x89;    // 16us, 10 pulses
     const DEFAULT_POFFSET_UR = 0;       // 0 offset
     const DEFAULT_POFFSET_DL = 0;       // 0 offset      
     const DEFAULT_CONFIG1 = 0x60;    // No 12x wait (WTIME) factor
-    const DEFAULT_PILT = 0;       // Low proximity threshold
-    const DEFAULT_PIHT = 50;      // High proximity threshold
     const DEFAULT_AILT = 0xFFFF;  // Force interrupt for calibration
     const DEFAULT_AIHT = 0;
     const DEFAULT_PERS = 0x11;    // 2 consecutive prox or ALS for int.
     const DEFAULT_CONFIG2 = 0x01;    // No saturation interrupts or LED boost  
     const DEFAULT_CONFIG3 = 0;       // Enable all photodiodes, no SAI
-    const DEFAULT_GPENTH = 40;      // Threshold for entering gesture mode
-    const DEFAULT_GEXTH = 30;      // Threshold for exiting gesture mode    
-    const DEFAULT_GCONF1 = 0x40;    // 4 gesture events for int., 1 for exit
-    const DEFAULT_GOFFSET = 0;       // No offset scaling for gesture mode
-    const DEFAULT_GPULSE = 0xC9;    // 32us, 10 pulses
-    const DEFAULT_GCONF3 = 0;       // All photodiodes active during gesture
-    const DEFAULT_GIEN = 0;       // Disable gesture interrupts
     const DEFAULT_LDRIVE = LED_DRIVE_100MA;
     const DEFAULT_AGAIN = AGAIN_4X;
     
     const OFF = 0;
-    const ON = 1;
     const POWER = 0;
     const AMBIENT_LIGHT = 1;
-    const PROXIMITY = 2;
-    const WAIT = 3;
-    const AMBIENT_LIGHT_INT = 4;
-    const PROXIMITY_INT = 5;
-    const GESTURE = 6;
     const ALL = 7;
 
 
@@ -1391,21 +1364,6 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
         return adValue;
     }     
     
-/**
- * Set extension pins output high/low
- */
-  function qdee_ext_output(pin: number, out: number)
-    {
-        let buf = pins.createBuffer(7);
-        buf[0] = 0x55;
-        buf[1] = 0x55;
-        buf[2] = 0x05;
-        buf[3] = 0x3E;//cmd type
-        buf[4] = 0x2;
-        buf[5] = pin;
-        buf[6] = out;
-        serial.writeBuffer(buf);
-    }
     /**
 	 * Initialize RGB
 	 */
