@@ -475,7 +475,7 @@ namespace qdee {
                 let arg2Int: number = strToNumber(cmd.substr(2, 3));
                 if (arg1Int == 1)
                 {
-                    servo1Angle = arg1Int;
+                    servo1Angle = arg2Int;
                     control.raiseEvent(MESSAGE_ANGLE, 1);
                 }
                 else if (arg1Int == 2)
