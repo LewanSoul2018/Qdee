@@ -652,7 +652,7 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
  /**
   *  Get servos angle
   */
- //% weight=96 blockId=getServosAngle block="Get|%servo|angle"
+ //% weight=96 blockId=getServosAngle block="Get|%servo|angle(-120~120)"
     export function getServosAngle(servo: Servos): number {
         if (servo == Servos.Servo1) {
             return servo1Angle;
