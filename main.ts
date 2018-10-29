@@ -322,8 +322,12 @@ namespace qdee {
     let lhRGBLightBelt: QdeeRGBLight.LHQdeeRGBLight;
 
     let PA6 = 2;
+    let PA7 = 2;
     let PB0 = 2;
-
+    let PB1 = 2;
+    let PB10 = 2;
+    let PB11 = 2;
+    let PC13 = 2;
 
     let PA6_ad = 0;
     let PA7_ad = 0;
@@ -461,10 +465,6 @@ namespace qdee {
             {
                 connectStatus = false;    
             }
-            if (cmd.compare("PEOPLE") == 0)//查询沙发状态指令
-            {
-                
-            }
             if (cmd.charAt(0).compare("S") == 0 && cmd.length == 5)
             {
                 let arg1Int: number = strToNumber(cmd.substr(1, 1));
@@ -494,7 +494,6 @@ namespace qdee {
                 }
                 
             }
-
         }
         handleCmd = "";
     }
@@ -822,7 +821,6 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
     const APDS9960_CONTROL = 0x8F;
     const APDS9960_CONFIG2 = 0x90;
     const APDS9960_ID = 0x92;
-    const APDS9960_STATUS  = 0x93;
     const APDS9960_CDATAL  = 0x94;
     const APDS9960_CDATAH  = 0x95;
     const APDS9960_RDATAL  = 0x96;
@@ -839,10 +837,8 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
     /* LED Drive values */
     const LED_DRIVE_100MA = 0;
 
-
     /* ALS Gain (AGAIN) values */
     const AGAIN_4X = 1;
-
     
     /* Default values */
     const DEFAULT_ATIME = 219;    // 103ms
@@ -1364,6 +1360,21 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
         return adValue;
     }     
     
+/**
+ * Set extension pins output high/low
+ */
+  function qdee_ext_output(pin: number, out: number)
+    {
+        let buf = pins.createBuffer(7);
+        buf[0] = 0x55;
+        buf[1] = 0x55;
+        buf[2] = 0x05;
+        buf[3] = 0x3E;//cmd type
+        buf[4] = 0x2;
+        buf[5] = pin;
+        buf[6] = out;
+        serial.writeBuffer(buf);
+    }
     /**
 	 * Initialize RGB
 	 */
