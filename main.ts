@@ -482,13 +482,13 @@ namespace qdee {
                     arg2Int = 1000;
                 if (arg1Int == 1)
                 {
-                    servo1Angle = mapRGB(arg2Int, 0, 1000, 0, 240);
+                  //  servo1Angle = mapRGB(arg2Int, 0, 1000, 0, 240);
                     servo1Angle -= 120;
                     control.raiseEvent(MESSAGE_ANGLE, 1);
                 }
                 else if (arg1Int == 2)
                 {
-                    servo2Angle = mapRGB(arg2Int, 0, 1000, 0, 240);
+                //    servo2Angle = mapRGB(arg2Int, 0, 1000, 0, 240);
                     servo2Angle -= 120;
                     control.raiseEvent(MESSAGE_ANGLE, 2);
                 }
