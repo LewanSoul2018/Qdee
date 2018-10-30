@@ -80,6 +80,7 @@
 	"qdee.QdeeCmdType.GAME|block":"游戏",
 	"qdee.QdeeCmdType.WIFI_MODE|block":"Wifi模式",
 	"qdee.QdeeCmdType.GET_MAC|block":"配对请求",
+	"qdee.QdeeCmdType.CHANGE_MODE|block":"切换工作模式",
 	"qdee.QdeeCarRunCmdType.STOP|block":"停止",
 	"qdee.QdeeCarRunCmdType.GO_AHEAD|block":"前进",
 	"qdee.QdeeCarRunCmdType.GO_BACK|block":"后退",

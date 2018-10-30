@@ -254,7 +254,9 @@ namespace qdee {
         //% block="WIFI mode"
         WIFI_MODE = 17,
         //% block="Get mac"
-        GET_MAC = 18
+        GET_MAC = 18,
+        //% block="Change mode"
+        CHANGE_MODE=19
     }
 
     export enum QdeeCarRunCmdType {
@@ -1497,7 +1499,7 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
             if (cmdHead == "CMD") {
                 let cmdTypeStr: string = str.substr(4, 2);
                 let cmdType = strToNumber(cmdTypeStr);
-                if (cmdType > QdeeCmdType.GET_MAC || cmdType < 0) {
+                if (cmdType > QdeeCmdType.CHANGE_MODE || cmdType < 0) {
                     return QdeeCmdType.NO_COMMAND;
                 }
                 else {
