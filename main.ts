@@ -469,30 +469,29 @@ namespace qdee {
             {
                 let arg1Int: number = strToNumber(cmd.substr(1, 1));
                 let arg2Str = cmd.substr(2, 3);
-                if (arg2Str.compare("XXX"))
+                if (arg2Str.compare("XXX") == 0)
                 {
                     return;
                 }
                 let arg2Int: number = 0;
-                if (!arg2Str.charAt(0).compare("F"))
+                if (arg2Str.charAt(0).compare("F") != 0)
                 {
-                    arg2Int = strToNumber(cmd.substr(2, 3));
+                    arg2Int = strToNumber(arg2Str);
                 }
                 if (arg2Int > 1000)
                     arg2Int = 1000;
                 if (arg1Int == 1)
                 {
-                  //  servo1Angle = mapRGB(arg2Int, 0, 1000, 0, 240);
+                    servo1Angle = mapRGB(arg2Int, 0, 1000, 0, 240);
                     servo1Angle -= 120;
                     control.raiseEvent(MESSAGE_ANGLE, 1);
                 }
                 else if (arg1Int == 2)
                 {
-                //    servo2Angle = mapRGB(arg2Int, 0, 1000, 0, 240);
+                    servo2Angle = mapRGB(arg2Int, 0, 1000, 0, 240);
                     servo2Angle -= 120;
                     control.raiseEvent(MESSAGE_ANGLE, 2);
-                }
-                
+                }  
             }
         }
         handleCmd = "";
@@ -643,7 +642,7 @@ export function qdee_readAngle(servo: Servos)
  */
  //% weight=97 blockId=onQdee_getAngle block="On Qdee|%servo|get angle"
 export function onQdee_getAngle(servo: Servos,body: Action) {
-        control.onEvent(MESSAGE_ANGLE,servo,body);
+    control.onEvent(MESSAGE_ANGLE, servo, body);
 }
 
 
@@ -1611,7 +1610,6 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
     //% weight=55 blockId=qdee_connectWifi block="Connect to the Wifi,name|%ssid|and password %passwrd"
     export function qdee_connectWifi(ssid: string, passwrd: string)
     {
-
         let buf = pins.createBuffer(ssid.length + passwrd.length + 10);
         buf[0] = 0x55;
         buf[1] = 0x55;
