@@ -23,6 +23,7 @@ enum QdeeRGBColors {
     White = 9
 }
 
+
  enum QdeeLights {
     //% block="Light 1"
     Light1 = 0x00,
@@ -153,7 +154,7 @@ namespace QdeeRGBLight {
                         break;    
     
                     case QdeeRGBColors.Orange:
-                        tureRgb = 0xFFA500;    
+                        tureRgb = 0xF58517;    
                         break;    
     
                     case QdeeRGBColors.Yellow:
