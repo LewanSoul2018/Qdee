@@ -256,7 +256,11 @@ namespace qdee {
         //% block="Get mac"
         GET_MAC = 18,
         //% block="Change mode"
-        CHANGE_MODE=19
+        CHANGE_MODE = 19,
+        //% block="Show face"
+        SHOW_FACE = 20,
+         //% block="Play tone"
+        PLAY_TONE = 21       
     }
 
     export enum QdeeCarRunCmdType {
@@ -1560,7 +1564,7 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
     /**
      * Returns the enumeration of the command type, which can be compared with this module after obtaining the bluetooth command type sent by the mobile phone APP.
      */
-    //% weight=64 blockId=qdee_getBluetoothCmdtype block="Bluetooth command type %type"
+    //% weight=65 blockId=qdee_getBluetoothCmdtype block="Bluetooth command type %type"
     export function qdee_getBluetoothCmdtype(type: QdeeCmdType): number {
         return type;
     }
@@ -1568,9 +1572,137 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
     /**
      * The command type of the tank is stop, go ahead, back, turn left, turn right, slow down, turn left slowly, turn right slowly.
      */
-    //% weight=62 blockId=qdee_getRunCarType block="Car run type %type"
+    //% weight=64 blockId=qdee_getRunCarType block="Car run type %type"
     export function qdee_getRunCarType(type: QdeeCarRunCmdType): number {
         return type;
+    }
+
+    /**
+    * Set the Qdee show facial expressions
+    */
+    //% weight=63 blockId=qdee_show_expressions block="Qdee show facial expressions %type"
+    export function qdee_show_expressions(type: number) {
+        switch (type)
+        {
+            case 0:
+            basic.showLeds(`
+            . . . . .
+            . . . . .
+            . . . . .
+            . . . . .
+            . . . . .
+            `)
+                break;
+
+            case 1:
+                basic.showIcon(IconNames.Heart);
+                break;
+            
+            case 2:
+                basic.showIcon(IconNames.Yes);
+                break;
+            
+            case 3:
+                basic.showIcon(IconNames.No);
+                break;
+            
+            case 4:
+                basic.showIcon(IconNames.Happy)
+                break;
+            
+            case 5:
+                basic.showIcon(IconNames.Sad)
+                break;
+            
+            case 6:
+                basic.showIcon(IconNames.Angry)
+                break;
+            
+            case 7:
+            basic.showLeds(`
+            . . # . .
+            . # # # .
+            # . # . #
+            . . # . .
+            . . # . .
+            `)
+            break;
+            
+            case 8:
+            basic.showLeds(`
+            . . # . .
+            . . # . .
+            # . # . #
+            . # # # .
+            . . # . .
+            `)
+            break;
+            
+            case 9:
+            basic.showLeds(`
+            . . # . .
+            . # . . .
+            # # # # #
+            . # . . .
+            . . # . .
+            `)
+                break;
+            
+            case 10:
+            basic.showLeds(`
+            . . # . .
+            . . . # .
+            # # # # #
+            . . . # .
+            . . # . .
+            `)
+                break;
+            
+        }
+    }
+    
+    /**
+     * Set Qdee play tone
+     */
+    //% weight=62 blockId=qdee_playTone block="Qdee play |tone %tone|and beats %rhythm"
+    export function qdee_playTone(tone: number, rhythm: number) {
+        let toneNum: number = 0;
+        switch (tone)
+        {
+            case 1:
+                toneNum = 523;
+                break;
+            
+            case 2:
+                toneNum = 587;
+                break;
+            
+            case 3:
+                toneNum = 659;
+                break;
+            
+            case 4:
+                toneNum = 698;
+                break;
+            
+            case 5:
+                toneNum = 784;
+                break;
+            
+            case 6:
+                toneNum = 880;
+                break;
+            
+            case 7:
+                toneNum = 998;
+                break;
+            
+            case 8:
+                toneNum = 1047;
+                break;
+        }
+        music.playTone(toneNum, rhythm);
+
     }
 
     /**

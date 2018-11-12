@@ -81,6 +81,8 @@
 	"qdee.QdeeCmdType.WIFI_MODE|block":"Wifi模式",
 	"qdee.QdeeCmdType.GET_MAC|block":"配对请求",
 	"qdee.QdeeCmdType.CHANGE_MODE|block":"切换工作模式",
+	"qdee.QdeeCmdType.SHOW_FACE|block":"显示表情",
+	"qdee.QdeeCmdTyp.PLAY_TONE|block":"播放音调",
 	"qdee.QdeeCarRunCmdType.STOP|block":"停止",
 	"qdee.QdeeCarRunCmdType.GO_AHEAD|block":"前进",
 	"qdee.QdeeCarRunCmdType.GO_BACK|block":"后退",
@@ -159,6 +161,7 @@
 	"qdee.Servos.Servo2|block":"舵机2",
 	"qdee.qdee_readAngle|block":"发送读|%servo|角度命令",
 	"qdee.getServosAngle|block":"获取|%servo|角度(-120~120)",
-	"qdee.onQdee_getAngle|block":"当读取到|%servo|角度时执行"
-
+	"qdee.onQdee_getAngle|block":"当读取到|%servo|角度时执行",
+	"qdee.qdee_show_expressions|block":"Qdee显示表情 %type",
+	"qdee.qdee_playTone|block":"Qdee播放音调|%tone|,|%rhythm 拍"
 }
