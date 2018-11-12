@@ -1470,12 +1470,21 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
     export function qdee_belt_setPixelRGB(lightoffset: QdeeLightsBelt, rgb: QdeeRGBColors)
     { 
         lhRGBLightBelt.setBeltPixelColor(lightoffset, rgb);
-     }
+    }
+    
+    /**
+     * Set the color of the colored lights, after finished the setting please perform  the display of colored lights.
+     */
+    //% weight=70 blockId=qdee_belt_setPixelRGBIndex block="Set light belt|%lightoffset|color to %rgb"
+    export function qdee_belt_setPixelRGBIndex(lightoffset: QdeeLightsBelt, rgb: number)
+    { 
+        lhRGBLightBelt.setBeltPixelColor(lightoffset, rgb);
+    }
     
     /**
      * Display the colored lights, and set the color of the colored lights to match the use. After setting the color of the colored lights, the color of the lights must be displayed.
      */
-    //% weight=70 blockId=qdee_belt_showLight block="Show light belt"
+    //% weight=69 blockId=qdee_belt_showLight block="Show light belt"
     export function qdee_belt_showLight() {
         lhRGBLightBelt.show();
     }
@@ -1483,7 +1492,7 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
     /**
      * Clear the color of the colored lights and turn off the lights.
      */
-    //% weight=69 blockGap=50 blockId=qdee_belt_clearLight block="Clear light belt"
+    //% weight=68 blockGap=50 blockId=qdee_belt_clearLight block="Clear light belt"
     export function qdee_belt_clearLight() {
         lhRGBLightBelt.clear();
     }
@@ -1495,7 +1504,7 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
      /**
      * Resolve the Bluetooth that phone APP send command type, the total of nine types of commands: tank display command, servo debug command, obtaining the distance of ultrasonic command, obtaining temperature command, obtain sound size rank orders, to obtain the light level command, set the color lights command, honking command, firmware version information command.
      */
-    //% weight=68 blockId=qdee_analyzeBluetoothCmd block="Get bluetooth command type %str"
+    //% weight=67 blockId=qdee_analyzeBluetoothCmd block="Get bluetooth command type %str"
     export function qdee_analyzeBluetoothCmd(str: string): number {
         if (str.length > 6) {
             let cmdHead = str.substr(0, 3);
