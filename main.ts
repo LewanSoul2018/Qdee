@@ -1601,6 +1601,7 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
     }
     /**
      * Resolve the parameters that the phone APP send the command,there are 3 parameters of servo debug command,the other command has just one parameter.
+    * @param index number of the learn code in 1-3. eg: 1
      */
     //% weight=65  blockId=qdee_getArgs block="Get bluetooth command|%str|argument at %index"
     //% index.min=1 index.max=3
