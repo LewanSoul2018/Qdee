@@ -1749,6 +1749,7 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
     //% weight=61 blockId=qdee_playTone block="Qdee play |tone %tone|and beats %rhythm"
     export function qdee_playTone(tone: number, rhythm: number) {
         let toneNum: number = 0;
+        let beat: number;
         switch (tone)
         {
             case 1:
@@ -1783,7 +1784,31 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
                 toneNum = 1047;
                 break;
         }
-        music.playTone(toneNum, rhythm);
+
+        switch (rhythm)
+        {
+            case 1:
+                beat = music.beat(BeatFraction.Eighth);
+                break;
+            
+            case 2:
+                beat = music.beat(BeatFraction.Quarter);
+                break;
+            
+            case 3:
+                beat = music.beat(BeatFraction.Half);
+                break;
+            
+            case 4:
+                beat = music.beat(BeatFraction.Whole);
+                break;
+            
+            case 5:
+                beat = music.beat(BeatFraction.Double);
+                break;
+        }
+
+        music.playTone(toneNum, beat);
 
     }
 
