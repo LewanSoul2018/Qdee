@@ -93,6 +93,7 @@
 	"qdee.QdeeCarRunCmdType.TURN_RIGHT_SLOW|block":"慢速右转",
 	"qdee.QdeeCarRunCmdType.COMMAND_ERRO|block":"无效的命令",
 	"qdee.qdee_convertTemperature|block":"转换温度命令 %data",
+	"qdee.qdee_convertUltrasonic|block":"转换超声波命令 %data",
 	"qdee.qdee_convertSound|block":"转换声音命令 %data",
 	"qdee.qdee_convertLight|block":"转换光线命令 %data",
 	"qdee.qdee_convertBattery|block":"转换电量命令 %data",
@@ -164,5 +165,6 @@
 	"qdee.onQdee_getAngle|block":"当读取到|%servo|角度时执行",
 	"qdee.qdee_show_expressions|block":"Qdee显示表情 %type",
 	"qdee.qdee_playTone|block":"Qdee播放音调|%tone|,|%rhythm 拍",
-	"qdee.qdee_belt_setPixelRGBIndex|block":"设置灯带|%lightoffset|段颜色为 %rgb"
+	"qdee.qdee_belt_setPixelRGBIndex|block":"设置灯带|%lightoffset|段颜色为 %rgb",
+	"qdee.qdee_send_remote_phone_data|block":"Qdee发送手机遥控码 %data"
 }
