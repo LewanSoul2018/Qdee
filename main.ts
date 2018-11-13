@@ -1584,7 +1584,7 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
             if (cmdHead == "CMD") {
                 let cmdTypeStr: string = str.substr(4, 2);
                 let cmdType = strToNumber(cmdTypeStr);
-                if (cmdType > QdeeCmdType.CHANGE_MODE || cmdType < 0) {
+                if (cmdType > QdeeCmdType.PLAY_TONE || cmdType < 0) {
                     return QdeeCmdType.NO_COMMAND;
                 }
                 else {
