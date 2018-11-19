@@ -1673,8 +1673,7 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
         let light3 = (type >> 16) & 0xff;
         let light4 = (type >> 24) & 0xff;
 
-     //   let showStr: ImageLiteral = `.......#...###...#.......`;
-        let showStr = `00000001...11100010000000`; 
+        let showStr: ImageLiteral = `.......#...###...#.......`;
         basic.showLeds(showStr);
     }
     
