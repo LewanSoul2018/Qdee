@@ -1614,10 +1614,6 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
         else {
             let dataIndex = 7;
             let subLegth = 2;
-            if (cmdType == QdeeCmdType.SHOW_FACE)
-            {
-                subLegth = 4;
-            }
             if (index == 2)
             {
                 dataIndex = 10;
@@ -1668,14 +1664,83 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
     */
     //% weight=62 blockId=qdee_show_expressions block="Qdee show facial expressions %type"
     export function qdee_show_expressions(type: number) {
-        let light1 = type & 0xff;
-        let light2 = (type >> 8) & 0xff;
-        let light3 = (type >> 16) & 0xff;
-        let light4 = (type >> 24) & 0xff;
-        let showStr = `.......#...###...#`;
-        let show = `.......`;
-        showStr += show;
-        basic.showLeds(showStr);
+        switch (type)
+        {
+            case 0:
+            basic.showLeds(`
+            . . . . .
+            . . . . .
+            . . . . .
+            . . . . .
+            . . . . .
+            `)
+                break;
+
+            case 1:
+                basic.showIcon(IconNames.Heart);
+                break;
+            
+            case 2:
+                basic.showIcon(IconNames.Yes);
+                break;
+            
+            case 3:
+                basic.showIcon(IconNames.No);
+                break;
+            
+            case 4:
+                basic.showIcon(IconNames.Happy)
+                break;
+            
+            case 5:
+                basic.showIcon(IconNames.Sad)
+                break;
+            
+            case 6:
+                basic.showIcon(IconNames.Angry)
+                break;
+            
+            case 7:
+            basic.showLeds(`
+            . . # . .
+            . # # # .
+            # . # . #
+            . . # . .
+            . . # . .
+            `)
+            break;
+            
+            case 8:
+            basic.showLeds(`
+            . . # . .
+            . . # . .
+            # . # . #
+            . # # # .
+            . . # . .
+            `)
+            break;
+            
+            case 9:
+            basic.showLeds(`
+            . . # . .
+            . # . . .
+            # # # # #
+            . # . . .
+            . . # . .
+            `)
+                break;
+            
+            case 10:
+            basic.showLeds(`
+            . . # . .
+            . . . # .
+            # # # # #
+            . . . # .
+            . . # . .
+            `)
+                break;
+            
+        }
     }
     
     /**
