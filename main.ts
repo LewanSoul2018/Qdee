@@ -1675,9 +1675,6 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
 
         let showStr: string = ".......#...###...#.......";
         basic.showLeds(showStr);
-        break;
-            
-        }
     }
     
     /**
