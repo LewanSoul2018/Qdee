@@ -633,7 +633,7 @@ export function qdee_setBusServoNum(index: number) {
    let buf = pins.createBuffer(5);
    buf[0] = 0x55;
    buf[1] = 0x55;
-   buf[2] = 0x08;
+   buf[2] = 0x03;
    buf[3] = 0x36;//cmd type
    buf[4] = index;
    serial.writeBuffer(buf);
