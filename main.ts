@@ -1181,19 +1181,20 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
             t = qdee_Colors.Black;
             return (color == t);
         }
-        else if (r > 3200 && g > 5000 && b > 7000)
+        else if (r > 10000 && g > 16000 && b > 22000)
         {
-            t = qdee_Colors.White;
+	    if(g * 2 > b)
+            	t = qdee_Colors.White;
             return (color == t);
         }
-		if (t == qdee_Colors.Blue && b > 2000) {
+		if (t == qdee_Colors.Blue && b > 3500) {
            // serial.writeLine("blue");
             
 		}
-		else if (t == qdee_Colors.Green && g > 1200) {
+		else if (t == qdee_Colors.Green && g > 5000) {
            // serial.writeLine("green");
 		}
-		else if (t == qdee_Colors.Red && r > 1200) {
+		else if (t == qdee_Colors.Red && r > 3500) {
 			//serial.writeLine("red");
 		}
 		else
