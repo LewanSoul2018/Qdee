@@ -1170,12 +1170,12 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
 		{
 			t = qdee_Colors.Blue;
          }
-        //  serial.writeNumber(r); 
-        //  serial.writeLine("->red");
-        //  serial.writeNumber(g); 
-        //  serial.writeLine("->green"); 
-        //  serial.writeNumber(b); 
-        //  serial.writeLine("->blue"); 
+         serial.writeNumber(r); 
+         serial.writeLine("->red");
+         serial.writeNumber(g); 
+         serial.writeLine("->green"); 
+         serial.writeNumber(b); 
+         serial.writeLine("->blue"); 
         if(r < 260 && g < 260 && b < 530)
 		{
             t = qdee_Colors.Black;
