@@ -347,6 +347,8 @@ namespace qdee {
     let PB0_ad = 0;
     let PB1_ad = 0;
 
+    let iicPortStatus = false;
+
     let MESSAGE_HEAD = 0xff;
     let MESSAGE_MAC = 0x100;
     let MESSAGE_ANGLE = 0x101;
@@ -505,6 +507,17 @@ namespace qdee {
                     servo2Angle -= 120;
                     control.raiseEvent(MESSAGE_ANGLE, 2);
                 }  
+            }
+            if (cmd.compare("QdeeTest") == 0)
+            {
+                if (InitColor())
+                {
+                    serial.writeString("QdeeTestOK$");   
+                }
+                else
+                {
+                    serial.writeString("QdeeTestERR$");   
+                }
             }
         }
         handleCmd = "";
