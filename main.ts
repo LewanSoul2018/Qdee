@@ -291,6 +291,13 @@ namespace qdee {
         Sensor_2 = 2
     }
 
+    export enum statusPort {
+        //% block="LOW"
+        Low = 0x00,
+        //% block="HIGH"
+        High = 0x01
+    }
+
   /**
    * Qdee initialization, please execute at boot time
   */
@@ -1981,5 +1988,95 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
         buf[12] = 0xd;
         buf[13] = 0xa;
         serial.writeBuffer(buf);
+    }
+
+    /**
+     * Control the IO
+     */
+    //% weight=48 blockId=controlIODigital block="Set port %status"
+    export function controlIODigital(status: statusPort) {
+        let buf = pins.createBuffer(7);
+
+        buf[0] = 0x55;
+        buf[1] = 0x55;
+        buf[2] = 0x05;
+        buf[3] = 0x03E;//cmd type
+        buf[4] = 0x02;
+        buf[5] = 0x02;
+        buf[6] = status;
+        serial.writeBuffer(buf);
+
+        buf[0] = 0x55;
+        buf[1] = 0x55;
+        buf[2] = 0x05;
+        buf[3] = 0x03E;//cmd type
+        buf[4] = 0x02;
+        buf[5] = 0x03;
+        buf[6] = status;
+        serial.writeBuffer(buf);
+
+        buf[0] = 0x55;
+        buf[1] = 0x55;
+        buf[2] = 0x05;
+        buf[3] = 0x03E;//cmd type
+        buf[4] = 0x02;
+        buf[5] = 0x06;
+        buf[6] = status;
+        serial.writeBuffer(buf);
+
+        buf[0] = 0x55;
+        buf[1] = 0x55;
+        buf[2] = 0x05;
+        buf[3] = 0x03E;//cmd type
+        buf[4] = 0x02;
+        buf[5] = 0x07;
+        buf[6] = status;
+        serial.writeBuffer(buf);
+
+        buf[0] = 0x55;
+        buf[1] = 0x55;
+        buf[2] = 0x05;
+        buf[3] = 0x03E;//cmd type
+        buf[4] = 0x02;
+        buf[5] = 0x10;
+        buf[6] = status;
+        serial.writeBuffer(buf);
+
+        buf[0] = 0x55;
+        buf[1] = 0x55;
+        buf[2] = 0x05;
+        buf[3] = 0x03E;//cmd type
+        buf[4] = 0x02;
+        buf[5] = 0x11;
+        buf[6] = status;
+        serial.writeBuffer(buf);
+
+        buf[0] = 0x55;
+        buf[1] = 0x55;
+        buf[2] = 0x05;
+        buf[3] = 0x03E;//cmd type
+        buf[4] = 0x02;
+        buf[5] = 0x1A;
+        buf[6] = status;
+        serial.writeBuffer(buf);
+
+        buf[0] = 0x55;
+        buf[1] = 0x55;
+        buf[2] = 0x05;
+        buf[3] = 0x03E;//cmd type
+        buf[4] = 0x02;
+        buf[5] = 0x1B;
+        buf[6] = status;
+        serial.writeBuffer(buf);
+
+        buf[0] = 0x55;
+        buf[1] = 0x55;
+        buf[2] = 0x05;
+        buf[3] = 0x03E;//cmd type
+        buf[4] = 0x02;
+        buf[5] = 0x2D;
+        buf[6] = status;
+        serial.writeBuffer(buf);
+
     }
 }
