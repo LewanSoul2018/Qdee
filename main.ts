@@ -1937,7 +1937,7 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
         buf[1] = 0x55;
         buf[2] = (str.length + 3) & 0xff;
         buf[3] = 0x3E;//cmd type
-        buf[4] = 0x6;
+        buf[4] = 0x9;
         for (let i = 0; i < str.length; i++)
         {
             buf[5 + i] = str.charCodeAt(i);
