@@ -918,6 +918,7 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
     const APDS9960_I2C_ADDR = 0x39;
     const APDS9960_ID_1 = 0xA8;
     const APDS9960_ID_2 = 0x9C;
+    const APDS9960_ID_3 = 0xAB;
     /* APDS-9960 register addresses */
     const APDS9960_ENABLE = 0x80;
     const APDS9960_ATIME  = 0x81;
@@ -989,7 +990,7 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
         let id = i2cread(APDS9960_ID);
         //  serial.writeLine("id:")
         //  serial.writeNumber(id); 
-        if (!(id == APDS9960_ID_1 || id == APDS9960_ID_2)) {
+        if (!(id == APDS9960_ID_1 || id == APDS9960_ID_2 ||id == APDS9960_ID_3)) {
             return false;
         }
         return true;
@@ -999,7 +1000,7 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
          let id = i2cread(APDS9960_ID);
         //  serial.writeLine("id:")
         //  serial.writeNumber(id); 
-        if (!(id == APDS9960_ID_1 || id == APDS9960_ID_2)) {
+        if (!(id == APDS9960_ID_1 || id == APDS9960_ID_2 || id == APDS9960_ID_3)) {
             return false;
          }
         //  serial.writeLine("set mode:")
