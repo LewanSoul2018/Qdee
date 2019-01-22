@@ -510,7 +510,7 @@ namespace qdee {
             }
             if (cmd.compare("QdeeTest") == 0)
             {
-                if (InitColor())
+                if (GetColorSenserID())
                 {
                     qdee_send_to_check("QdeeTestOK$");
                 }
@@ -983,6 +983,16 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
 		pins.i2cWriteNumber(APDS9960_I2C_ADDR, reg, NumberFormat.UInt8BE);
         let val = pins.i2cReadNumber(APDS9960_I2C_ADDR, NumberFormat.UInt8BE);
         return val;
+    }
+
+    function GetColorSenserID(): boolean {
+        let id = i2cread(APDS9960_ID);
+        //  serial.writeLine("id:")
+        //  serial.writeNumber(id); 
+        if (!(id == APDS9960_ID_1 || id == APDS9960_ID_2)) {
+            return false;
+        }
+        return true;
     }
 
      function InitColor(): boolean {
