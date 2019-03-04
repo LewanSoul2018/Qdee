@@ -328,6 +328,15 @@
             sendVersionCmd();
             basic.pause(30)
         }
+        if (versionNum == -1)
+        {
+            basic.showString("O")
+        }
+        else
+        {
+            basic.showString("N")
+            
+        }
         basic.pause(2000);
         initExtPins();
     }
@@ -507,6 +516,7 @@
             {
                 let arg1Int: number = strToNumber(cmd.substr(1, 1));
                 let arg2Int: number = strToNumber(cmd.substr(3, 1));
+
                 if (arg1Int != -1 && arg2Int != -1)
                 {
                     versionNum = arg1Int * 10 + arg2Int;
