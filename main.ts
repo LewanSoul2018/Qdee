@@ -512,7 +512,9 @@ namespace qdee {
             {
                 if (GetColorSenserID())
                 {
-                    qdee_send_to_check("QdeeTestOKK$");
+		    basic.pause(50);
+                    qdee_send_to_check("QdeeTestOK$");
+		    basic.pause(50);
                 }
                 else
                 {
