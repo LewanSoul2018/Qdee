@@ -512,9 +512,9 @@ namespace qdee {
             {
                 if (GetColorSenserID())
                 {
-		    basic.pause(30);
+		    basic.pause(100);
                     qdee_send_to_check("QdeeTestOK$");
-		    basic.pause(30);
+		    basic.pause(100);
                 }
                 else
                 {
@@ -992,10 +992,13 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
         let id = i2cread(APDS9960_ID);
         //  serial.writeLine("id:")
         //  serial.writeNumber(id); 
-        if (!(id == APDS9960_ID_1 || id == APDS9960_ID_2 ||id == APDS9960_ID_3)) {
-            return false;
-        }
-        return true;
+//         if (!(id == APDS9960_ID_1 || id == APDS9960_ID_2 ||id == APDS9960_ID_3)) {
+//             return false;
+//         }
+	if(id != 0xff && id != 0)
+           return true;
+	else
+           return false;
     }
 
      function InitColor(): boolean {
@@ -2046,7 +2049,7 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
         buf[5] = 0x06;
         buf[6] = status;
         serial.writeBuffer(buf);
-        basic.pause(70);
+        basic.pause(60);
 
         buf[0] = 0x55;
         buf[1] = 0x55;
@@ -2056,7 +2059,7 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
         buf[5] = 0x07;
         buf[6] = status;
         serial.writeBuffer(buf);
-        basic.pause(70);
+        basic.pause(60);
 
         buf[0] = 0x55;
         buf[1] = 0x55;
@@ -2066,7 +2069,7 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
         buf[5] = 0x10;
         buf[6] = status;
         serial.writeBuffer(buf);
-        basic.pause(70);
+        basic.pause(60);
 
         buf[0] = 0x55;
         buf[1] = 0x55;
@@ -2076,7 +2079,7 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
         buf[5] = 0x11;
         buf[6] = status;
         serial.writeBuffer(buf);
-        basic.pause(70);
+        basic.pause(60);
 
         buf[0] = 0x55;
         buf[1] = 0x55;
@@ -2086,7 +2089,7 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
         buf[5] = 0x1A;
         buf[6] = status;
         serial.writeBuffer(buf);
-        basic.pause(70);
+        basic.pause(60);
 
         buf[0] = 0x55;
         buf[1] = 0x55;
@@ -2096,7 +2099,7 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
         buf[5] = 0x1B;
         buf[6] = status;
         serial.writeBuffer(buf);
-        basic.pause(70);
+        basic.pause(60);
 
         buf[0] = 0x55;
         buf[1] = 0x55;
@@ -2106,6 +2109,6 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
         buf[5] = 0x2D;
         buf[6] = status;
         serial.writeBuffer(buf);
-        basic.pause(70);
+        basic.pause(60);
     }
 }
