@@ -480,6 +480,7 @@ namespace qdee {
             }
             if (cmd.compare("QdeeTest") == 0)
             {
+                basic.pause(10);
                 if (GetColorSenserID())
                 {
 		            basic.pause(100);
