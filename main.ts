@@ -350,8 +350,8 @@ namespace qdee {
     let iicPortStatus = false;
 
     let MESSAGE_HEAD = 0xff;
-    let MESSAGE_MAC = 0x100;
-    let MESSAGE_ANGLE = 0x101;
+    let MESSAGE_HEAD_LONG: number = 0x100;
+    let MESSAGE_HEAD_STOP: number = 0x101;
 
     let i2cPortValid: boolean = true;
     let connectStatus: boolean = false;
@@ -360,6 +360,10 @@ namespace qdee {
     let servo2Angle: number = 0xfff;
 
     let macStr: string = "";
+
+    let cntIr = 0;
+    let adress = 0;
+    let sendFlag = false;
     /**
     * Get the handle command.
     */
@@ -427,98 +431,66 @@ namespace qdee {
                 {   
                     let high = (arg5Int >> 8) & 0xff;
                     let low = arg5Int & 0xff;
-                    if (low >= extAddress.adress_10 && low <= extAddress.adress_1)
+                    if (high == 0)
                     {
-                        control.raiseEvent(low,high);    
+                        if (adress != 0) {
+                            control.raiseEvent(MESSAGE_HEAD_STOP, 0);
+                        }    
+                        sendFlag = false;
+                        adress = 0;
                     }
-                    else if (low == 0xff)
+                    else
                     {
-                        control.raiseEvent(MESSAGE_HEAD,high);    
+                        if (low >= extAddress.adress_10 && low <= extAddress.adress_1)
+                        {
+                            control.raiseEvent(low, high);
+                        }
+                        else if (low == 0xff)
+                        {
+                            if (adress != high) {
+                                if (!sendFlag) {
+                                    control.raiseEvent(MESSAGE_HEAD, high);
+                                    sendFlag = true;
+                                }
+                                adress = high
+                            }
+                            else {
+                                cntIr++;
+                            }
+                            if (cntIr >= 3) {
+                                cntIr = 0;
+                                control.raiseEvent(MESSAGE_HEAD_LONG, high);
+                            }
+                        }                                   
                     }
-                    
-                }  
-                if (arg6Int != -1)
-                {
+                }
+                if (arg6Int != -1) {
                     PC13 = arg6Int;
                 }
-                if (arg7Int != -1)
-                {
+                if (arg7Int != -1) {
                     PB11 = arg7Int;
                 }
-                if (arg8Int != -1)
-                {
-                    PB10 = arg8Int;    
-                }
+                if (arg8Int != -1) {
+                    PB10 = arg8Int;
+                }  
             }  
-            if (cmd.charAt(0).compare("C") == 0 && cmd.length == 11)
-            {
-                if (lhRGBLightBelt != null)
-                {
-                    for (let i = 0; i < 10; i++)
-                    {
-                        let color = converOneChar(cmd.charAt(i + 1));
-                        if(color != -1)
-                             lhRGBLightBelt.setBeltPixelColor(i,color);
-                    }
-                    lhRGBLightBelt.show();
-                }
-            }
             if (cmd.compare("IROK") == 0)
             {
                 music.playTone(988, music.beat(BeatFraction.Quarter));
-            }
-            if (cmd.charAt(0).compare("M") == 0 && cmd.length == 18)
-            {
-                macStr = cmd.substr(1,17);
-                control.raiseEvent(MESSAGE_MAC, 1);
-            }
-            if (cmd.compare("WIFI_S_CONNECT") == 0)
-            {
-                connectStatus = true;    
-            }
-            if (cmd.compare("WIFI_S_DISCONNECT") == 0)
-            {
-                connectStatus = false;    
-            }
-            if (cmd.charAt(0).compare("S") == 0 && cmd.length == 5)
-            {
-                let arg1Int: number = strToNumber(cmd.substr(1, 1));
-                let arg2Str = cmd.substr(2, 3);
-                if (arg2Str.compare("XXX") == 0)
-                {
-                    return;
-                }
-                let arg2Int: number = 0;
-                if (arg2Str.charAt(0).compare("F") != 0)
-                {
-                    arg2Int = strToNumber(arg2Str);
-                }
-                if (arg2Int > 1000)
-                    arg2Int = 1000;
-                if (arg1Int == 1)
-                {
-                    servo1Angle = mapRGB(arg2Int, 0, 1000, 0, 240);
-                    servo1Angle -= 120;
-                    control.raiseEvent(MESSAGE_ANGLE, 1);
-                }
-                else if (arg1Int == 2)
-                {
-                    servo2Angle = mapRGB(arg2Int, 0, 1000, 0, 240);
-                    servo2Angle -= 120;
-                    control.raiseEvent(MESSAGE_ANGLE, 2);
-                }  
             }
             if (cmd.compare("QdeeTest") == 0)
             {
                 if (GetColorSenserID())
                 {
-		    basic.pause(100);
+		            basic.pause(100);
                     qdee_send_to_check("QdeeTestOK$");
-		    basic.pause(100);
+                    basic.pause(100);
                 }
                 else
                 {
+                    basic.pause(100);
                     qdee_send_to_check("QdeeTestERR$");
+                    basic.pause(100);
                 }
             }
         }
@@ -617,91 +589,6 @@ namespace qdee {
             return -1; 
     }
 
-
-/**
-* Set the angle of bus servo 1 to 8, range of -120~120 degree
-*/
-//% weight=99 blockId=qdee_setBusServo block="Set bus servo|port %port|index %index|angle(-120~120) %angle|duration %duration"
-//% angle.min=-120 angle.max=120
-export function qdee_setBusServo(port: busServoPort,index: number, angle: number, duration: number) {
-    if (angle > 120 || angle < -120)
-    {
-        return; 
-    }    
-    
-    angle += 120;
-
-    let position = mapRGB(angle, 0, 240, 0, 1000);
-   
-   let buf = pins.createBuffer(10);
-   buf[0] = 0x55;
-   buf[1] = 0x55;
-   buf[2] = 0x08;
-   buf[3] = 0x03;//cmd type
-   buf[4] = 0x01;
-   buf[5] = duration & 0xff;
-   buf[6] = (duration >> 8) & 0xff;
-   buf[7] = index;
-   buf[8] = position & 0xff;
-   buf[9] = (position >> 8) & 0xff;
-   serial.writeBuffer(buf);
-    }
-    
-/**
-* Set the number of the servo.
-*/
-//% weight=98 blockId=qdee_setBusServoNum block="Set bus servo|number %port|"
-export function qdee_setBusServoNum(index: number) {
-   let buf = pins.createBuffer(5);
-   buf[0] = 0x55;
-   buf[1] = 0x55;
-   buf[2] = 0x03;
-   buf[3] = 0x36;//cmd type
-   buf[4] = index;
-   serial.writeBuffer(buf);
-}    
-
-/**
- * Send read qdee servos angle command
- */
-//% weight=97 blockId=qdee_readAngle block="Send read|%servo|angle command "
-export function qdee_readAngle(servo: Servos)
-{
-    let buf = pins.createBuffer(6);
-    buf[0] = 0x55;
-    buf[1] = 0x55;
-    buf[2] = 0x04;
-    buf[3] = 0x3E;//cmd type
-    buf[4] = 0x05;
-    buf[5] = servo;
-    serial.writeBuffer(buf);
-}
-   
-
-/**
- * Do someting when Qdee receive angle
- * @param body code to run when event is raised
- */
- //% weight=96 blockId=onQdee_getAngle block="On Qdee|%servo|get angle"
-export function onQdee_getAngle(servo: Servos,body: Action) {
-    control.onEvent(MESSAGE_ANGLE, servo, body);
-}
-
-
- /**
-  *  Get servos angle
-  */
- //% weight=95 blockId=getServosAngle block="Get|%servo|angle(-120~120)"
-    export function getServosAngle(servo: Servos): number {
-        if (servo == Servos.Servo1) {
-            return servo1Angle;
-        }
-        else if (servo == Servos.Servo2) {
-            return servo2Angle;
-        }
-        else
-            return 0xFFF;
- }   
     
 /**
 *	Set the speed of the number 1 motor and number 2 motor, range of -100~100, that can control the tank to go advance or turn of.
@@ -767,10 +654,30 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
         control.onEvent(MESSAGE_HEAD,code,body);
     }
 
+        /**
+     * Do someting when remote-control longpress
+     * @param code the ir key button that needs to be pressed
+     * @param body code to run when event is raised
+     */
+    //% weight=90 blockId=onQdee_remote_ir_longpressed block="on remote-control|%code|long pressed"
+    export function onQdee_remote_ir_longpressed(code: IRKEY, body: Action) {
+        control.onEvent(MESSAGE_HEAD_LONG, code, body);
+    }
+
+        /**
+     * Do someting when remote-control stop send
+     * @param code the ir key button that needs to be pressed
+     * @param body code to run when event is raised
+     */
+    //% weight=88 blockId=onQdee_remote_no_ir block="on remote-control stop send"
+    export function onQdee_remote_no_ir(body: Action) {
+        control.onEvent(MESSAGE_HEAD_STOP, 0, body);
+    }
+
 /**
 * Let Qdee send ir remote-control data
 */
-  //% weight=90 blockId=qdee_send_remote_data block="Let Qdee send ir remote-control|key %irKey|"
+  //% weight=86 blockId=qdee_send_remote_data block="Let Qdee send ir remote-control|key %irKey|"
   export function qdee_send_remote_data(irKey: IRKEY)
   {
       let buf = pins.createBuffer(8);
@@ -789,7 +696,7 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
 /**
 * Let Qdee send ir remote-control data from phone
 */
-  //% weight=89 blockId=qdee_send_remote_phone_data block="Let Qdee send phone ir remote-control|key %data|"
+  //% weight=84 blockId=qdee_send_remote_phone_data block="Let Qdee send phone ir remote-control|key %data|"
   export function qdee_send_remote_phone_data(data: number)
   {
       let irKey: IRKEY;
@@ -860,7 +767,7 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
 * Set ir enter learn mode
 * @param num number of the learn code in 1-10. eg: 1
 */
-  //% weight=88 blockId=qdee_ir_learn_mode block="Set ir enter learning mode,code number(1~10) %num|"   
+  //% weight=82 blockId=qdee_ir_learn_mode block="Set ir enter learning mode,code number(1~10) %num|"   
 //% num.min=1 num.max=10    
   export function qdee_ir_learn_mode(num: number)
   {
@@ -882,7 +789,7 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
 * Let Qdee send ir learn data
 * @param num number of the learn code in 1-10. eg: 1
 */
-  //% weight=87 blockId=qdee_send_learn_data block="Let Qdee send ir learning code,code|number(1~10) %num|"
+  //% weight=80 blockId=qdee_send_learn_data block="Let Qdee send ir learning code,code|number(1~10) %num|"
   //% num.min=1 num.max=10  
   export function qdee_send_learn_data(num: number)
   {
@@ -904,7 +811,7 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
 /**
 * Get the volume level detected by the sound sensor, range 0 to 255
 */
-//% weight=86 blockId=qdee_getSoundVolume block="Sound volume"
+//% weight=78 blockId=qdee_getSoundVolume block="Sound volume"
 	export function qdee_getSoundVolume(): number {	
   	    return volume;
     }	
@@ -912,7 +819,7 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
 /**
  *  Get Qdee current voltage,the unit is mV
 */
-    //% weight=85 blockGap=50 blockId=qdee_getBatVoltage block="Get Qdee current voltage (mV)"
+    //% weight=76 blockGap=50 blockId=qdee_getBatVoltage block="Get Qdee current voltage (mV)"
     export function qdee_getBatVoltage(): number {
         return currentVoltage;
     }
@@ -992,13 +899,10 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
         let id = i2cread(APDS9960_ID);
         //  serial.writeLine("id:")
         //  serial.writeNumber(id); 
-//         if (!(id == APDS9960_ID_1 || id == APDS9960_ID_2 ||id == APDS9960_ID_3)) {
-//             return false;
-//         }
-	if(id != 0xff && id != 0)
-           return true;
-	else
-           return false;
+        if (!(id == APDS9960_ID_1 || id == APDS9960_ID_2 ||id == APDS9960_ID_3)) {
+            return false;
+        }
+        return true;
     }
 
      function InitColor(): boolean {
@@ -1168,7 +1072,7 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
 /**
  * Initialize the color sensor,please execute at boot time
  */
-    //% weight=84 blockId=qdee_init_colorSensor block="Initialize color sensor port at %port"
+    //% weight=74 blockId=qdee_init_colorSensor block="Initialize color sensor port at %port"
     export function qdee_init_colorSensor(port: colorSensorPort) {
         if (i2cPortValid)
         {
@@ -1182,7 +1086,7 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
     /**
 	 *  Color sensor return the color.
 	 */
-	//% weight=83 blockId=qdee_checkCurrentColor block="Current color %color"
+	//% weight=72 blockId=qdee_checkCurrentColor block="Current color %color"
     export function qdee_checkCurrentColor(color: qdee_Colors): boolean {
 		let r = readRedLight();
 		let g = readGreenLight();
@@ -1241,80 +1145,11 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
         return (color == t);
 	}
 
-/**
-* Get the obstacle avoidance sensor status,1 detect obstacle,0 no detect obstacle
-*/   
-   //% weight=82 blockId=qdee_avoidSensor block="Obstacle avoidance sensor|port %port|detect obstacle"
-    export function qdee_avoidSensor(port: touchKeyPort): boolean {
-        let status = 0;
-        let flag: boolean = false;
-        switch (port)
-        {
-            case touchKeyPort.port1:
-                pins.setPull(DigitalPin.P1, PinPullMode.PullUp);
-                status = pins.digitalReadPin(DigitalPin.P1);
-                break;
-            case touchKeyPort.port2:
-                pins.setPull(DigitalPin.P13, PinPullMode.PullUp);
-                status = pins.digitalReadPin(DigitalPin.P13);
-                break;
-            case touchKeyPort.port3:
-                pins.setPull(DigitalPin.P16, PinPullMode.PullUp);
-                status = pins.digitalReadPin(DigitalPin.P16);
-                break;
-            case touchKeyPort.port6:
-                status = PA6;
-                break;
-            case touchKeyPort.port8:
-                status = PB0;
-                break;
-        }   
-        if (status == 1)
-            flag = false;
-        else
-            flag = true;
-        return flag;
-    }
-
-/**
- * Set fan speed
- * @param speed the speed of the fan in -100~100. eg: 80
- */
-    //% weight=81 blockId=qdee_fan_speed block="Set the fan|port %port|speed %speed"
-    //% speed.min=-100 speed.max=100
-    export function qdee_fan_speed(port: fanPort,speed: number) {
-        let pin1Clock = 0;
-        let pin2Clock = 0;
-        if (speed > 100)
-            speed = 100;
-        else if (speed < -100)
-            speed = -100;
-        speed = speed * 1023 / 100;
-        if (speed > 0)//正转
-        {
-            pin1Clock = speed;
-        }
-        else
-        {
-            pin2Clock = -1*speed;
-        }
-        switch (port)
-        {
-            case fanPort.port1:
-                pins.analogWritePin(AnalogPin.P1, pin1Clock);
-                pins.analogWritePin(AnalogPin.P2, pin2Clock);
-                break;
-            case fanPort.port2:
-                pins.analogWritePin(AnalogPin.P13, pin1Clock);
-                pins.analogWritePin(AnalogPin.P14, pin2Clock);
-                break;
-        }
-    }
 
 /**
 * Get the condition of the line follower sensor
 */
-    //% weight=80 blockId=qdee_readLineFollowerStatus block="Line follower status|port %port|%status"
+    //% weight=70 blockId=qdee_readLineFollowerStatus block="Line follower status|port %port|%status"
     export function qdee_readLineFollowerStatus(port: lineFollowPort, status: qdee_lineFollower): boolean {
         let s1 = 0;
         let s2 = 0;
@@ -1369,7 +1204,7 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
     /**
      * Get the line follower sensor port ad value
      */
-    //% weight=79 blockId=qdee_lineSensorValue block="Get line follower sensor|port %port|%sensor|ad value"
+    //% weight=68 blockId=qdee_lineSensorValue block="Get line follower sensor|port %port|%sensor|ad value"
     export function qdee_lineSensorValue(port: lineFollowPort, sensor: LineFollowerSensor): number {
         let s1 = 0;
         let s2 = 0;
@@ -1400,41 +1235,12 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
         }
 
     }
-/**
-* Get the condition of the touch button,press return 1,or return 0
-*/
-    //% weight=78 blockId=qdee_touchButton block=" Touch button|port %port|is pressed"    
-    export function qdee_touchButton(port: touchKeyPort): boolean {
-        let status: boolean = false;
-        switch (port)
-        {
-            case touchKeyPort.port1:
-                pins.setPull(DigitalPin.P1, PinPullMode.PullUp);
-                status = !pins.digitalReadPin(DigitalPin.P1);
-                break;
-            case touchKeyPort.port2:
-                pins.setPull(DigitalPin.P13, PinPullMode.PullUp);
-                status = !pins.digitalReadPin(DigitalPin.P13);
-                break;
-            case touchKeyPort.port3:
-                pins.setPull(DigitalPin.P16, PinPullMode.PullUp);
-                status = !pins.digitalReadPin(DigitalPin.P16);
-                break;
-            case touchKeyPort.port6:
-                status = !PA6;
-                break;  
-            case touchKeyPort.port8:
-                status = !PB0;
-                break;  
-        }
-        return status;
-    } 
 
     let distanceBak = 0;
   /**
    * Get the distance of ultrasonic detection to the obstacle 
    */  
-//% weight=77 blockId=qdee_ultrasonic  block="Ultrasonic|port %port|distance(cm)"
+//% weight=66 blockId=qdee_ultrasonic  block="Ultrasonic|port %port|distance(cm)"
     export function qdee_ultrasonic(port: ultrasonicPort): number {
         let trigPin: DigitalPin = DigitalPin.P1;
         switch (port)
@@ -1466,43 +1272,6 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
         return distance * 10 /6 /58;
   }
   
-/**
-* Get the ad value of the knob moudule
-*/
-    //% weight=76 blockId=qdee_getKnobValue blockGap=50 block="Get knob|port %port|value(0~255)"
-    export function qdee_getKnobValue(port: knobPort): number {
-        let adValue = 0;
-        switch (port)
-        {
-            case knobPort.port1:
-                adValue = pins.analogReadPin(AnalogPin.P1);
-                adValue = adValue * 255 / 1023;
-                break;
-            case knobPort.port6:
-                adValue = PA6_ad;
-                break;  
-            case knobPort.port8:
-                adValue = PB0_ad;
-                break;  
-        }
-        return adValue;
-    }     
-    
-/**
- * Set extension pins output high/low
- */
-  function qdee_ext_output(pin: number, out: number)
-  {
-        let buf = pins.createBuffer(7);
-        buf[0] = 0x55;
-        buf[1] = 0x55;
-        buf[2] = 0x05;
-        buf[3] = 0x3E;//cmd type
-        buf[4] = 0x2;
-        buf[5] = pin;
-        buf[6] = out;
-        serial.writeBuffer(buf);
-    }
     /**
 	 * Initialize RGB
 	 */
@@ -1518,7 +1287,7 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
          * @param brightness a measure of LED brightness in 0-255. eg: 255
     */
     //% blockId="qdee_setBrightness" block="set brightness %brightness"
-    //% weight=75
+    //% weight=64
     export function qdee_setBrightness(brightness: number): void {
         lhRGBLight.setBrightness(brightness);
     }
@@ -1526,7 +1295,7 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
     /**
      * Set the color of the colored lights, after finished the setting please perform  the display of colored lights.
      */
-    //% weight=74 blockId=qdee_setPixelRGB block="Set|%lightoffset|color to %rgb"
+    //% weight=62 blockId=qdee_setPixelRGB block="Set|%lightoffset|color to %rgb"
     export function qdee_setPixelRGB(lightoffset: QdeeLights, rgb: QdeeRGBColors)
     { 
         lhRGBLight.setPixelColor(lightoffset, rgb);
@@ -1536,17 +1305,16 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
     /**
      * Set RGB Color argument
      */
-    //% weight=73 blockId=qdee_setPixelRGBArgs block="Set|%lightoffset|color to %rgb"
+    //% weight=60 blockId=qdee_setPixelRGBArgs block="Set|%lightoffset|color to %rgb"
     export function qdee_setPixelRGBArgs(lightoffset: QdeeLights, rgb: number)
     {
         lhRGBLight.setPixelColor(lightoffset, rgb);
     }
 
-
     /**
      * Display the colored lights, and set the color of the colored lights to match the use. After setting the color of the colored lights, the color of the lights must be displayed.
      */
-    //% weight=72 blockId=qdee_showLight block="Show light"
+    //% weight=58 blockId=qdee_showLight block="Show light"
     export function qdee_showLight() {
         lhRGBLight.show();
     }
@@ -1554,398 +1322,15 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
     /**
      * Clear the color of the colored lights and turn off the lights.
      */
-    //% weight=71 blockGap=50 blockId=qdee_clearLight block="Clear light"
+    //% weight=56 blockGap=50 blockId=qdee_clearLight block="Clear light"
     export function qdee_clearLight() {
         lhRGBLight.clear();
-    }
-
-    /**
-	 * Initialize Light belt
-	 */
-    //% weight=70 blockId=qdee_belt_initRGBLight block="Initialize light belt at port %port"
-    export function qdee_belt_initRGBLight(port: ultrasonicPort) {
-        switch (port)
-        {
-            case ultrasonicPort.port1:
-                if (!lhRGBLightBelt) {
-                    lhRGBLightBelt = QdeeRGBLight.create(DigitalPin.P1, 30, QdeeRGBPixelMode.RGB);
-                }
-                break;
-            case ultrasonicPort.port2:
-                if (!lhRGBLightBelt) {
-                    lhRGBLightBelt = QdeeRGBLight.create(DigitalPin.P13, 30, QdeeRGBPixelMode.RGB);
-                }
-                break;
-            case ultrasonicPort.port3:
-                if (!lhRGBLightBelt) {
-                    lhRGBLightBelt = QdeeRGBLight.create(DigitalPin.P16, 30, QdeeRGBPixelMode.RGB);
-                }
-                break;
-        }
-
-        qdee_clearLight();
-    }
-
-    /**
-     * Set the color of the colored lights, after finished the setting please perform  the display of colored lights.
-     */
-    //% weight=69 blockId=qdee_belt_setPixelRGB block="Set light belt|%lightoffset|color to %rgb"
-    export function qdee_belt_setPixelRGB(lightoffset: QdeeLightsBelt, rgb: QdeeRGBColors)
-    { 
-        lhRGBLightBelt.setBeltPixelColor(lightoffset, rgb);
-    }
-    
-    /**
-     * Set the color of the colored lights, after finished the setting please perform  the display of colored lights.
-     */
-    //% weight=68 blockId=qdee_belt_setPixelRGBIndex block="Set light belt|%lightoffset|color to %rgb"
-    export function qdee_belt_setPixelRGBIndex(lightoffset: QdeeLightsBelt, rgb: number)
-    { 
-        lhRGBLightBelt.setBeltPixelColor(lightoffset, rgb);
-    }
-    
-    /**
-     * Display the colored lights, and set the color of the colored lights to match the use. After setting the color of the colored lights, the color of the lights must be displayed.
-     */
-    //% weight=67 blockId=qdee_belt_showLight block="Show light belt"
-    export function qdee_belt_showLight() {
-        lhRGBLightBelt.show();
-    }
-
-    /**
-     * Clear the color of the colored lights and turn off the lights.
-     */
-    //% weight=66 blockGap=50 blockId=qdee_belt_clearLight block="Clear light belt"
-    export function qdee_belt_clearLight() {
-        lhRGBLightBelt.clear();
     }
 
 	function mapRGB(x: number, in_min: number, in_max: number, out_min: number, out_max: number): number {
 		return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
     
-     /**
-     * Resolve the Bluetooth that phone APP send command type, the total of nine types of commands: tank display command, servo debug command, obtaining the distance of ultrasonic command, obtaining temperature command, obtain sound size rank orders, to obtain the light level command, set the color lights command, honking command, firmware version information command.
-     */
-    //% weight=65 blockId=qdee_analyzeBluetoothCmd block="Get bluetooth command type %str"
-    export function qdee_analyzeBluetoothCmd(str: string): number {
-        if (str.length > 6) {
-            let cmdHead = str.substr(0, 3);
-            
-            if (cmdHead == "CMD") {
-                let cmdTypeStr: string = str.substr(4, 2);
-                let cmdType = strToNumber(cmdTypeStr);
-                if (cmdType > QdeeCmdType.PLAY_TONE || cmdType < 0) {
-                    return QdeeCmdType.NO_COMMAND;
-                }
-                else {
-                    return cmdType;
-                }
-            }
-            else {
-                return QdeeCmdType.NO_COMMAND;
-            }
-        }
-        else {
-            return QdeeCmdType.NO_COMMAND;
-        }
-    }
-    /**
-     * Resolve the parameters that the phone APP send the command,there are 3 parameters of servo debug command,the other command has just one parameter.
-    * @param index number of the learn code in 1-3. eg: 1
-     */
-    //% weight=64  blockId=qdee_getArgs block="Get bluetooth command|%str|argument at %index"
-    //% index.min=1 index.max=3
-    export function qdee_getArgs(str: string, index: number): number {
-        let cmdType = qdee_analyzeBluetoothCmd(str);
-        if (cmdType == QdeeCmdType.NO_COMMAND)
-        {
-            return QdeeCarRunCmdType.COMMAND_ERRO;
-        }
-        else {
-            let dataIndex = 7;
-            let subLegth = 2;
-            if (index == 2)
-            {
-                dataIndex = 10;
-                subLegth = 2;
-            }
-            else if (index == 3)
-            {
-                dataIndex = 13;
-                subLegth = 4;
-            } 
-            if (cmdType == QdeeCmdType.SERVO)
-            {
-                if (str.length < 17)
-                {
-                    return QdeeCmdType.NO_COMMAND;
-                }    
-            }
-            if ((index == 1 && str.length < 10)||(index == 2 && str.length < 13)||(index == 3 && str.length < 17))
-            {
-                return 0;
-            }    
-            let strArgs = str.substr(dataIndex, subLegth);  
-            let arg = strToNumber(strArgs);
-            if (arg == -1)
-                return 0;
-            return arg;
-        }
-    }
-
-    /**
-     * Returns the enumeration of the command type, which can be compared with this module after obtaining the bluetooth command type sent by the mobile phone APP.
-     */
-    //% weight=63 blockId=qdee_getBluetoothCmdtype block="Bluetooth command type %type"
-    export function qdee_getBluetoothCmdtype(type: QdeeCmdType): number {
-        return type;
-    }
-
-    /**
-     * The command type of the tank is stop, go ahead, back, turn left, turn right, slow down, turn left slowly, turn right slowly.
-     */
-    //% weight=62 blockId=qdee_getRunCarType block="Car run type %type"
-    export function qdee_getRunCarType(type: QdeeCarRunCmdType): number {
-        return type;
-    }
-
-    /**
-    * Set the Qdee show facial expressions
-    */
-    //% weight=61 blockId=qdee_show_expressions block="Qdee show facial expressions %type"
-    export function qdee_show_expressions(type: number) {
-        switch (type)
-        {
-            case 0:
-            basic.showLeds(`
-            . . . . .
-            . . . . .
-            . . . . .
-            . . . . .
-            . . . . .
-            `)
-                break;
-
-            case 1:
-                basic.showIcon(IconNames.Heart);
-                break;
-            
-            case 2:
-                basic.showIcon(IconNames.Yes);
-                break;
-            
-            case 3:
-                basic.showIcon(IconNames.No);
-                break;
-            
-            case 4:
-                basic.showIcon(IconNames.Happy)
-                break;
-            
-            case 5:
-                basic.showIcon(IconNames.Sad)
-                break;
-            
-            case 6:
-                basic.showIcon(IconNames.Angry)
-                break;
-            
-            case 7:
-            basic.showLeds(`
-            . . # . .
-            . # # # .
-            # . # . #
-            . . # . .
-            . . # . .
-            `)
-            break;
-            
-            case 8:
-            basic.showLeds(`
-            . . # . .
-            . . # . .
-            # . # . #
-            . # # # .
-            . . # . .
-            `)
-            break;
-            
-            case 9:
-            basic.showLeds(`
-            . . # . .
-            . # . . .
-            # # # # #
-            . # . . .
-            . . # . .
-            `)
-                break;
-            
-            case 10:
-            basic.showLeds(`
-            . . # . .
-            . . . # .
-            # # # # #
-            . . . # .
-            . . # . .
-            `)
-                break;
-            
-        }
-    }
-    
-    /**
-     * Set Qdee play tone
-     */
-    //% weight=60 blockId=qdee_playTone block="Qdee play |tone %tone|and beats %rhythm"
-    export function qdee_playTone(tone: number, rhythm: number) {
-        let toneNum: number = 0;
-        let beat: number;
-        switch (tone)
-        {
-            case 1:
-                toneNum = 523;
-                break;
-            
-            case 2:
-                toneNum = 587;
-                break;
-            
-            case 3:
-                toneNum = 659;
-                break;
-            
-            case 4:
-                toneNum = 698;
-                break;
-            
-            case 5:
-                toneNum = 784;
-                break;
-            
-            case 6:
-                toneNum = 880;
-                break;
-            
-            case 7:
-                toneNum = 998;
-                break;
-            
-            case 8:
-                toneNum = 1047;
-                break;
-        }
-
-        switch (rhythm)
-        {
-            case 1:
-                beat = music.beat(BeatFraction.Eighth);
-                break;
-            
-            case 2:
-                beat = music.beat(BeatFraction.Quarter);
-                break;
-            
-            case 3:
-                beat = music.beat(BeatFraction.Half);
-                break;
-            
-            case 4:
-                beat = music.beat(BeatFraction.Whole);
-                break;
-            
-            case 5:
-                beat = music.beat(BeatFraction.Double);
-                break;
-        }
-
-        music.playTone(toneNum, beat);
-
-    }
-
-    /**
-     * The distance from the ultrasonic obstacle to the standard command, which is sent to the mobile phone. The APP will indicate the distance of the ultrasonic obstacle.
-     */
-    //% weight=59 blockId=qdee_convertUltrasonic block="Convert ultrasonic distance %data"
-    export function qdee_convertUltrasonic(data: number): string {
-        let cmdStr: string = "CMD|03|";
-        cmdStr += data.toString();
-        cmdStr += "|$";
-        return cmdStr;
-    }
-    /**
-     * The conversion temperature value to standard command, sent to the mobile phone, and the APP displays the current temperature.
-     */
-    //% weight=58 blockId=qdee_convertTemperature block="Convert temperature %data"
-    export function qdee_convertTemperature(data: number): string {
-        let cmdStr: string = "CMD|04|";
-        cmdStr += data.toString();
-        cmdStr += "|$";
-        return cmdStr;
-    }
-
-    /**
-     * Convert the sound value to the standard command and send it to the mobile phone. (0~255).
-     */
-    //% weight=57 blockId=qdee_convertLight block="Convert sound %data"
-    export function qdee_convertSound(data: number): string {
-        let cmdStr: string = "CMD|05|";
-        cmdStr += data.toString();
-        cmdStr += "|$";
-        return cmdStr;
-    }
-
-    /**
-     * Convert the light value to the standard command and send it to the mobile phone. The APP displays the current light level (0~255).
-     */
-    //% weight=56 blockId=qdee_convertLight block="Convert light %data"
-    export function qdee_convertLight(data: number): string {
-        let cmdStr: string = "CMD|06|";
-        cmdStr += data.toString();
-        cmdStr += "|$";
-        return cmdStr;
-    }
-    
-    /**
-     * Convert the battery value to the standard command and send it to the mobile phone. The APP displays the current voltage.
-     */
-    //% weight=55 blockId=qdee_convertBattery blockGap=50 block="Convert battery %data"
-    export function qdee_convertBattery(data: number): string {
-        let cmdStr: string = "CMD|07|";
-        cmdStr += data.toString();
-        cmdStr += "|$";
-        return cmdStr;
-    }
-
-
-    /**
-     * Connect to the wifi
-     */
-    //% weight=54 blockId=qdee_connectWifi block="Connect to the Wifi,name|%ssid|and password %passwrd"
-    export function qdee_connectWifi(ssid: string, passwrd: string)
-    {
-        let buf = pins.createBuffer(ssid.length + passwrd.length + 10);
-        buf[0] = 0x55;
-        buf[1] = 0x55;
-        buf[2] = (ssid.length + passwrd.length + 8) & 0xff;
-        buf[3] = 0x3E;//cmd type
-        buf[4] = 0x6;
-        buf[5] = 0x22;
-        for (let i = 0; i < ssid.length; i++)
-        {
-            buf[6 + i] = ssid.charCodeAt(i);
-        }   
-        buf[ssid.length + 6] = 0x22;
-        buf[ssid.length + 7] = 0x2C;
-        buf[ssid.length + 8] = 0x22;
-        for (let i = 0; i < passwrd.length; i++)
-        {
-            buf[ssid.length + 9 + i] = passwrd.charCodeAt(i);
-        }   
-        buf[ssid.length + passwrd.length + 9] = 0x22;
-        serial.writeBuffer(buf);
-    }
-
     function qdee_send_to_check(str: string)
     {
         let buf = pins.createBuffer(str.length  + 5);
@@ -1962,82 +1347,9 @@ export function onQdee_getAngle(servo: Servos,body: Action) {
     }
 
     /**
-     * Detect the device connect status
-     */
-    //% weight=53 blockId=qdee_isConnectedServer block="Device is connected to server?"
-    export function qdee_isConnectedServer(): boolean
-    {
-        return connectStatus;
-    }
-
-    /**
-     * Send get mac address command
-     */
-    //% weight=52 blockId=qdee_send_getMac block="Send pair command"
-    export function qdee_send_getMac()
-    {
-        let buf = pins.createBuffer(5);
-        buf[0] = 0x55;
-        buf[1] = 0x55;
-        buf[2] = 0x03;
-        buf[3] = 0x3E;//cmd type
-        buf[4] = 0x08;
-        serial.writeBuffer(buf);
-    }
-
-    /**
-     * Do someting when Qdee receive mac adress
-     * @param body code to run when event is raised
-     */
-    //% weight=51 blockId=onQdee_getMac block="On Qdee get device id"
-    export function onQdee_getMac(body: Action) {
-        control.onEvent(MESSAGE_MAC,1,body);
-    }
-
-    /**
-     * Get device mac address
-     */
-    //% weight=50 blockId=qdee_getMacAddress block="Get device id"
-    export function qdee_getMacAddress(): string
-    {
-        return macStr + "$";
-    }
-
-    /**
-     * Send sofa status
-     */
-    //% weight=49 blockId=qdee_sendSofa block="Send sofa command %sofa"
-    export function qdee_sendSofa(sofa: SofaStatus)
-    {
-        let buf = pins.createBuffer(14);
-        buf[0] = 0x55;
-        buf[1] = 0x55;
-        buf[2] = 0x0C;
-        buf[3] = 0x3E;
-        buf[4] = 0x09;//cmd type
-        buf[5] = 0x50;
-        buf[6] = 0x45;
-        buf[7] = 0x4F;
-        buf[8] = 0x50;
-        buf[9] = 0x4C;
-        buf[10] = 0x45;
-        if (sofa == SofaStatus.VACATION)
-        {
-            buf[11] = 0x30;
-        }
-        else if (sofa == SofaStatus.OCCUPIED)
-        {
-            buf[11] = 0x31;
-        }
-        buf[12] = 0xd;
-        buf[13] = 0xa;
-        serial.writeBuffer(buf);
-    }
-
-    /**
      * Control the IO
      */
-    //% weight=48 blockId=controlIODigital block="Set port %status"
+    //% weight=54 blockId=controlIODigital block="Set port %status"
     export function controlIODigital(status: statusPort) {
         let buf = pins.createBuffer(7);
 
