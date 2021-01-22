@@ -483,15 +483,25 @@ namespace qdee {
                 basic.pause(10);
                 if (GetColorSenserID())
                 {
-		            basic.pause(100);
+		    basic.pause(100);
                     qdee_send_to_check("QdeeTestOK$");
                     basic.pause(100);
                 }
                 else
                 {
-                    basic.pause(100);
-                    qdee_send_to_check("QdeeTestERR$");
-                    basic.pause(100);
+		         if (GetColorSenserID())
+                	{
+		            basic.pause(100);
+                    	    qdee_send_to_check("QdeeTestOK$");
+                            basic.pause(100);
+                	}
+			else
+			{
+			   basic.pause(100);
+                    	   qdee_send_to_check("QdeeTestERR$");
+                    	   basic.pause(100);
+			}
+
                 }
             }
         }
@@ -900,7 +910,7 @@ namespace qdee {
         let id = i2cread(APDS9960_ID);
         //  serial.writeLine("id:")
         //  serial.writeNumber(id); 
-        if (!(id == APDS9960_ID_1 || id == APDS9960_ID_2 ||id == APDS9960_ID_3)) {
+        if (id == 0 || id == 0x7F || id == 0xFF) {
             return false;
         }
         return true;
